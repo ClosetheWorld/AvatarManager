@@ -15,7 +15,7 @@ public class ImageService : IImageService
     public async Task<string> DownloadAndCacheImageAsync(string id, string url)
     {
         var response = await _vrcApi.DownloadImageAsync(url);
-        var path = Path.Combine(Directory.GetCurrentDirectory(), $"Data\\CachedImages\\{id}.png");
+        var path = Path.Combine(Directory.GetCurrentDirectory(), $"Data\\CachedImages\\{id}_{DateTime.Now.ToString("yyyyMMddhhmmss")}.png");
         if (response.IsSuccessStatusCode)
         {
             using (var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))

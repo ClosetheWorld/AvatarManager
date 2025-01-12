@@ -8,4 +8,5 @@ public interface IAvatarService
     Task CacheAvatarAsync(OwnedAvatar avatar);
     Task<List<OwnedAvatar>> GetUnCategorizedAvatarsAsync();
     Task<List<OwnedAvatar>> GetAvatarsByFolderIdAsync(string folderId);
+    Task UpdateCachedAvatarAsync(OwnedAvatar avatar, string newImagePath);
 }
