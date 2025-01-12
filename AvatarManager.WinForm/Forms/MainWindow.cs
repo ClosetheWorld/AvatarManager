@@ -169,7 +169,7 @@ public partial class MainWindow : Form
         if (folder == null)
         {
             var avatars = await _avatarService.GetUnCategorizedAvatarsAsync();
-            foreach(var a in avatars)
+            foreach (var a in avatars)
             {
                 var i = avatarGrid.Rows.Add(new Bitmap(a.ImagePath), a.Name, a.Id);
                 avatarGrid.Rows[i].Height = 70;
@@ -220,6 +220,23 @@ public partial class MainWindow : Form
         foreach (var c in cachedAvatars)
         {
             var a = avatars.FirstOrDefault(x => x.Id == c.Id);
+            if (a == null)
+            {
+                continue;
+            }
+            // update cached avatar
+            if (a.Name != c.Name || a.ThumbnailImageUrl != c.ThumbnailImageUrl)
+            {
+                await _avatarService.UpdateCachedAvatarAsync(
+                    new OwnedAvatar
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        ThumbnailImageUrl = a.ThumbnailImageUrl
+                    },
+                    await _imageService.DownloadAndCacheImageAsync(a.Id, a.ThumbnailImageUrl));
+            }
+
             avatars.Remove(a);
         }
 
