@@ -38,7 +38,7 @@ public class VRChatApiClient : IVRChatApiClient
             InitApiClients();
             return result.Ok;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw e;
         }
@@ -64,7 +64,14 @@ public class VRChatApiClient : IVRChatApiClient
 
     public List<Avatar> GetAvatars(string userId)
     {
-        var avatars = _avatarsApi.SearchAvatars(user: "me", n: 60, releaseStatus: ReleaseStatus.All);
+        var avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+        if (avatars.Count == 100)
+        {
+            for (int i = 1; avatars.Count % 100 == 0; i++)
+            {
+                avatars.AddRange(_avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
+            }
+        }
         return avatars;
     }
 
@@ -87,6 +94,6 @@ public class VRChatApiClient : IVRChatApiClient
 
     private void InitApiClients()
     {
-        _avatarsApi = new AvatarsApi(_apiClient, _apiClient, _configuration);    
+        _avatarsApi = new AvatarsApi(_apiClient, _apiClient, _configuration);
     }
 }
