@@ -63,6 +63,7 @@ public partial class MainWindow : Form
         userName.Text = _user.DisplayName;
     }
 
+    #region EventHandlers
     /// <summary>
     /// フォームが表示されたときの処理
     /// </summary>
@@ -121,6 +122,24 @@ public partial class MainWindow : Form
         await _vrcApi.SetCurrentAvatarAsync(avatarGrid.Rows[e.RowIndex].Cells[2].Value.ToString());
     }
 
+    /// <summary>
+    /// folderGridで右クリックメニューの削除がクリックされたときの処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void deleteMenuItem_Click(object sender, EventArgs e)
+    {
+        if (MessageBox.Show($"以下のフォルダを削除します\n{folderGrid.Rows[currentFolderIndex].Cells[0].Value.ToString()}", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+        {
+            await _folderService.DeleteFolderAsync(folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
+            folderGrid.Rows.Clear();
+            await GenerateFolderGridAsync();
+            MessageBox.Show("削除しました");
+        }
+    }
+    #endregion
+
+    #region Methods
     /// <summary>
     /// フォルダグリッドを生成する
     /// </summary>
@@ -255,16 +274,5 @@ public partial class MainWindow : Form
             });
         }
     }
-
-    ///
-    private async void deleteMenuItem_Click(object sender, EventArgs e)
-    {
-        if (MessageBox.Show($"以下のフォルダを削除します\n{folderGrid.Rows[currentFolderIndex].Cells[0].Value.ToString()}", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
-        {
-            await _folderService.DeleteFolderAsync(folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
-            folderGrid.Rows.Clear();
-            await GenerateFolderGridAsync();
-            MessageBox.Show("削除しました");
-        }
-    }
+    #endregion
 }
