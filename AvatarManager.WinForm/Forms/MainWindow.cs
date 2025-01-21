@@ -119,7 +119,11 @@ public partial class MainWindow : Form
     /// <param name="e"></param>
     private async void avatarGrid_CellClick(object sender, DataGridViewCellEventArgs e)
     {
-        await _vrcApi.SetCurrentAvatarAsync(avatarGrid.Rows[e.RowIndex].Cells[2].Value.ToString());
+        // avatarGridのヘッダーがクリックされた場合は何もしない
+        if (e.RowIndex > 0)
+        {
+            await _vrcApi.SetCurrentAvatarAsync(avatarGrid.Rows[e.RowIndex].Cells[2].Value.ToString());
+        }
     }
 
     /// <summary>

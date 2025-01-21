@@ -81,14 +81,14 @@
             avatarGrid.ReadOnly = true;
             avatarGrid.RowHeadersVisible = false;
             avatarGrid.RowHeadersWidth = 45;
-            avatarGrid.Size = new Size(527, 392);
+            avatarGrid.Size = new Size(527, 517);
             avatarGrid.TabIndex = 2;
             avatarGrid.CellClick += avatarGrid_CellClick;
             // 
             // AvatarThumbnail
             // 
             AvatarThumbnail.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            AvatarThumbnail.FillWeight = 25F;
+            AvatarThumbnail.FillWeight = 20F;
             AvatarThumbnail.HeaderText = "サムネイル";
             AvatarThumbnail.ImageLayout = DataGridViewImageCellLayout.Zoom;
             AvatarThumbnail.Name = "AvatarThumbnail";
@@ -98,10 +98,11 @@
             // AvatarName
             // 
             AvatarName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            AvatarName.FillWeight = 75F;
+            AvatarName.FillWeight = 80F;
             AvatarName.HeaderText = "アバター名";
             AvatarName.Name = "AvatarName";
             AvatarName.ReadOnly = true;
+            AvatarName.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // AvatarId
             // 
@@ -123,7 +124,7 @@
             folderGrid.Name = "folderGrid";
             folderGrid.ReadOnly = true;
             folderGrid.RowHeadersVisible = false;
-            folderGrid.Size = new Size(227, 362);
+            folderGrid.Size = new Size(227, 477);
             folderGrid.TabIndex = 3;
             folderGrid.CellClick += folderGrid_CellClick;
             // 
@@ -146,7 +147,7 @@
             // settingButton
             // 
             settingButton.Font = new Font("Yu Gothic UI Light", 12F);
-            settingButton.Location = new Point(12, 400);
+            settingButton.Location = new Point(12, 515);
             settingButton.Name = "settingButton";
             settingButton.Size = new Size(227, 34);
             settingButton.TabIndex = 4;
@@ -159,19 +160,19 @@
             folderRightClickMenu.Items.AddRange(new ToolStripItem[] { editMenuItem, deleteMenuItem });
             folderRightClickMenu.Name = "contextMenuStrip1";
             folderRightClickMenu.RenderMode = ToolStripRenderMode.System;
-            folderRightClickMenu.Size = new Size(181, 70);
+            folderRightClickMenu.Size = new Size(99, 48);
             // 
             // editMenuItem
             // 
             editMenuItem.Name = "editMenuItem";
-            editMenuItem.Size = new Size(180, 22);
+            editMenuItem.Size = new Size(98, 22);
             editMenuItem.Text = "編集";
             editMenuItem.Click += editMenuItem_Click;
             // 
             // deleteMenuItem
             // 
             deleteMenuItem.Name = "deleteMenuItem";
-            deleteMenuItem.Size = new Size(180, 22);
+            deleteMenuItem.Size = new Size(98, 22);
             deleteMenuItem.Text = "削除";
             deleteMenuItem.Click += deleteMenuItem_Click;
             // 
@@ -179,13 +180,13 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(784, 436);
+            ClientSize = new Size(784, 561);
             Controls.Add(settingButton);
             Controls.Add(folderGrid);
             Controls.Add(avatarGrid);
             Controls.Add(loginPlaceHolder);
             Controls.Add(userName);
-            MinimumSize = new Size(800, 475);
+            MinimumSize = new Size(800, 600);
             Name = "MainWindow";
             Text = "AvatarManager";
             Shown += MainWindow_Shown;
@@ -205,11 +206,11 @@
         private Button settingButton;
         private DataGridViewTextBoxColumn Folders;
         private DataGridViewTextBoxColumn FolderId;
-        private DataGridViewImageColumn AvatarThumbnail;
-        private DataGridViewTextBoxColumn AvatarName;
-        private DataGridViewTextBoxColumn AvatarId;
         private ContextMenuStrip folderRightClickMenu;
         private ToolStripMenuItem editMenuItem;
         private ToolStripMenuItem deleteMenuItem;
+        private DataGridViewImageColumn AvatarThumbnail;
+        private DataGridViewTextBoxColumn AvatarName;
+        private DataGridViewTextBoxColumn AvatarId;
     }
 }
