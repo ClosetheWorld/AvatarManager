@@ -104,7 +104,7 @@ public partial class MainWindow : Form
     /// <param name="e"></param>
     private async void settingButton_Click(object sender, EventArgs e)
     {
-        var form = new SettingForm(_avatarService, _folderService);
+        var form = new SettingForm(_avatarService, _folderService, null);
         form.ShowDialog();
 
         // update folder grid
@@ -137,6 +137,20 @@ public partial class MainWindow : Form
             await GenerateFolderGridAsync();
             MessageBox.Show("削除しました");
         }
+    }
+
+    /// <summary>
+    /// folderGridで右クリックメニューの編集がクリックされたときの処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void editMenuItem_Click(object sender, EventArgs e)
+    {
+        var form = new SettingForm(_avatarService, _folderService, folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
+        form.ShowDialog();
+        currentFolderIndex = 0;
+        folderGrid.Rows.Clear();
+        await GenerateFolderGridAsync();
     }
     #endregion
 

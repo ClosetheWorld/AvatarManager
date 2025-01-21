@@ -8,4 +8,5 @@ public interface IFolderService
     Task<Folder> GetFolderAsync(string id);
     Task AddFolderAsync(Folder f);
     Task DeleteFolderAsync(string id);
+    Task UpdateFolderAsync(Folder f);
 }

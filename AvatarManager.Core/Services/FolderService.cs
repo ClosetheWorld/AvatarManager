@@ -39,4 +39,15 @@ public class FolderService : IFolderService
             await _dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task UpdateFolderAsync(Folder f)
+    {
+        var current = await _dbContext.Folders.FindAsync(f.Id);
+        if (current != null)
+        {
+            current.Name = f.Name;
+            current.ContainAvatarIds = f.ContainAvatarIds;
+            await _dbContext.SaveChangesAsync();
+        }
+    }
 }
