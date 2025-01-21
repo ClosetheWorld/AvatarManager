@@ -132,6 +132,7 @@ public partial class MainWindow : Form
         if (MessageBox.Show($"以下のフォルダを削除します\n{folderGrid.Rows[currentFolderIndex].Cells[0].Value.ToString()}", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
         {
             await _folderService.DeleteFolderAsync(folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
+            currentFolderIndex = 0;
             folderGrid.Rows.Clear();
             await GenerateFolderGridAsync();
             MessageBox.Show("削除しました");
