@@ -15,6 +15,7 @@ public partial class AuthForm : Form
         _vrcApi = vrcApi;
     }
 
+    #region EventHandlers
     /// <summary>
     /// 認証ボタンが押されたときの処理
     /// </summary>
@@ -65,4 +66,5 @@ public partial class AuthForm : Form
         };
         Process.Start(sInfo);
     }
+    #endregion
 }
