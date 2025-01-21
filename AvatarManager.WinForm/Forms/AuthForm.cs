@@ -25,8 +25,22 @@ public partial class AuthForm : Form
     {
         if (!string.IsNullOrEmpty(authTokenInput.Text))
         {
-            _vrcApi.Init(authTokenInput.Text);
-            await _vrcApi.AuthAsync();
+            try
+            {
+                _vrcApi.Init(authTokenInput.Text);
+                await _vrcApi.AuthAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "認証に失敗しました。\n" +
+                    "入力されているauthcookieが不正か、既に無効になっている可能性があります。\n" +
+                    "再度認証からやり直してみてください。",
+                    "認証エラー",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
             var user = await _vrcApi.GetCurrentUserAsync();
             Settings.Default.authToken = TokenHelper.EncodeToken(authTokenInput.Text);
             Settings.Default.Save();
@@ -42,13 +56,13 @@ public partial class AuthForm : Form
     /// <param name="e"></param>
     private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        linkLabel1.LinkVisited = true;        
+        linkLabel1.LinkVisited = true;
         var sInfo = new ProcessStartInfo()
         {
             FileName = "https://vrchat.com/home",
             UseShellExecute = true
         };
-        Process.Start(sInfo);        
+        Process.Start(sInfo);
     }
 
     /// <summary>
