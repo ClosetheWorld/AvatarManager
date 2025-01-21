@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             userName = new Label();
             loginPlaceHolder = new Label();
             avatarGrid = new DataGridView();
@@ -38,8 +39,12 @@
             Folders = new DataGridViewTextBoxColumn();
             FolderId = new DataGridViewTextBoxColumn();
             settingButton = new Button();
+            folderRightClickMenu = new ContextMenuStrip(components);
+            editMenuItem = new ToolStripMenuItem();
+            deleteMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)avatarGrid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)folderGrid).BeginInit();
+            folderRightClickMenu.SuspendLayout();
             SuspendLayout();
             // 
             // userName
@@ -149,6 +154,26 @@
             settingButton.UseVisualStyleBackColor = true;
             settingButton.Click += settingButton_Click;
             // 
+            // folderRightClickMenu
+            // 
+            folderRightClickMenu.Items.AddRange(new ToolStripItem[] { editMenuItem, deleteMenuItem });
+            folderRightClickMenu.Name = "contextMenuStrip1";
+            folderRightClickMenu.RenderMode = ToolStripRenderMode.System;
+            folderRightClickMenu.Size = new Size(181, 70);
+            // 
+            // editMenuItem
+            // 
+            editMenuItem.Name = "editMenuItem";
+            editMenuItem.Size = new Size(180, 22);
+            editMenuItem.Text = "編集";
+            // 
+            // deleteMenuItem
+            // 
+            deleteMenuItem.Name = "deleteMenuItem";
+            deleteMenuItem.Size = new Size(180, 22);
+            deleteMenuItem.Text = "削除";
+            deleteMenuItem.Click += deleteMenuItem_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -165,6 +190,7 @@
             Shown += MainWindow_Shown;
             ((System.ComponentModel.ISupportInitialize)avatarGrid).EndInit();
             ((System.ComponentModel.ISupportInitialize)folderGrid).EndInit();
+            folderRightClickMenu.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -181,5 +207,8 @@
         private DataGridViewImageColumn AvatarThumbnail;
         private DataGridViewTextBoxColumn AvatarName;
         private DataGridViewTextBoxColumn AvatarId;
+        private ContextMenuStrip folderRightClickMenu;
+        private ToolStripMenuItem editMenuItem;
+        private ToolStripMenuItem deleteMenuItem;
     }
 }

@@ -29,4 +29,14 @@ public class FolderService : IFolderService
         _dbContext.Folders.Add(f);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task DeleteFolderAsync(string id)
+    {
+        var folder = await _dbContext.Folders.FindAsync(id);
+        if (folder != null)
+        {
+            _dbContext.Folders.Remove(folder);
+            await _dbContext.SaveChangesAsync();
+        }
+    }
 }

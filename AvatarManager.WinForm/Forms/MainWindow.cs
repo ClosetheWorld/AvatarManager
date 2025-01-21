@@ -135,6 +135,7 @@ public partial class MainWindow : Form
             var i = folderGrid.Rows.Add(f.Name, f.Id);
             folderGrid.Rows[i].Height = 100;
             folderGrid.Rows[i].Cells[0].Style.Font = new Font("Yu Gothic UI", 12);
+            folderGrid.Rows[i].ContextMenuStrip = folderRightClickMenu;
         }
 
         // 末尾
@@ -252,6 +253,18 @@ public partial class MainWindow : Form
                 ThumbnailImageUrl = avatar.ThumbnailImageUrl,
                 ImagePath = imagePath
             });
+        }
+    }
+
+    ///
+    private async void deleteMenuItem_Click(object sender, EventArgs e)
+    {
+        if (MessageBox.Show($"以下のフォルダを削除します\n{folderGrid.Rows[currentFolderIndex].Cells[0].Value.ToString()}", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+        {
+            await _folderService.DeleteFolderAsync(folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
+            folderGrid.Rows.Clear();
+            await GenerateFolderGridAsync();
+            MessageBox.Show("削除しました");
         }
     }
 }
