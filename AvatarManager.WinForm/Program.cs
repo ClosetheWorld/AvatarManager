@@ -19,8 +19,9 @@ internal static class Program
     {
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
-        ApplicationConfiguration.Initialize();        
+        ApplicationConfiguration.Initialize();
 
+        EnsureCreateDirectorys();
         ServiceCollection services = new ServiceCollection();
         ConfigureServices(services);
         ServiceProvider serviceProvider = services.BuildServiceProvider();
@@ -40,5 +41,18 @@ internal static class Program
         {
             options.UseSqlite(DbHelper.GetConnectionString());
         });
+    }
+
+    private static void EnsureCreateDirectorys()
+    {
+        if (!Directory.Exists("Data"))
+        {
+            Directory.CreateDirectory("Data");
+        }
+
+        if (!Directory.Exists("Data/CachedImages"))
+        {
+            Directory.CreateDirectory("Data/CachedImages");
+        }
     }
 }
