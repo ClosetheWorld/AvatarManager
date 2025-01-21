@@ -166,6 +166,7 @@
             editMenuItem.Name = "editMenuItem";
             editMenuItem.Size = new Size(180, 22);
             editMenuItem.Text = "編集";
+            editMenuItem.Click += editMenuItem_Click;
             // 
             // deleteMenuItem
             // 

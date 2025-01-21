@@ -60,10 +60,13 @@ public class AvatarService : IAvatarService
     public async Task UpdateCachedAvatarAsync(OwnedAvatar avatar,  string newImagePath)
     {
         var current = await _dbContext.OwnedAvatars.FirstOrDefaultAsync(x => x.Id == avatar.Id);
-        current.Name = avatar.Name;
-        current.ThumbnailImageUrl = avatar.ThumbnailImageUrl;
-        current.ImagePath = newImagePath;
-        _dbContext.OwnedAvatars.Update(current);
-        await _dbContext.SaveChangesAsync();
+        if (current != null)
+        {
+            current.Name = avatar.Name;
+            current.ThumbnailImageUrl = avatar.ThumbnailImageUrl;
+            current.ImagePath = newImagePath;
+            _dbContext.OwnedAvatars.Update(current);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
