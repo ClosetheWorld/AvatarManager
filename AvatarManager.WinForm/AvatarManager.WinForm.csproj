@@ -6,6 +6,21 @@
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Company>じゅううん</Company>
+		<Product>AvatarManager</Product>
+		<Copyright>Copyright © じゅううん 2025</Copyright>
+		<PackageId>AvatarManager</PackageId>
+		<Authors>じゅううん</Authors>
+		<Version>1.0.0</Version>
+		<Title>AvatarManager</Title>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>portable</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>none</DebugType>
 	</PropertyGroup>
 
 
