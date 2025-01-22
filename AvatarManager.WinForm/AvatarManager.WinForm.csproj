@@ -11,9 +11,14 @@
 		<Copyright>Copyright © じゅううん 2025</Copyright>
 		<PackageId>AvatarManager</PackageId>
 		<Authors>じゅううん</Authors>
-		<Version>1.0.0</Version>
 		<Title>AvatarManager</Title>
 		<AssemblyName>AvatarManager</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+		<FileVersion>1.0.1.0</FileVersion>
+		<Version>1.0.1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

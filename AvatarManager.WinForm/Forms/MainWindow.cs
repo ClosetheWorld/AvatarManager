@@ -36,6 +36,7 @@ public partial class MainWindow : Form
         _dbContext = dbContext;
         _dbContext.Database.EnsureCreated();
 
+        Settings.Default.Upgrade();
         if (string.IsNullOrEmpty(Settings.Default.authToken))
         {
             var auth = new AuthForm(_vrcApi);
