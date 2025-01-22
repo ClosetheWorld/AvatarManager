@@ -108,6 +108,7 @@ public partial class MainWindow : Form
         form.ShowDialog();
 
         // update folder grid
+        currentFolderIndex = 0;
         folderGrid.Rows.Clear();
         await GenerateFolderGridAsync();
     }
@@ -155,6 +156,20 @@ public partial class MainWindow : Form
         currentFolderIndex = 0;
         folderGrid.Rows.Clear();
         await GenerateFolderGridAsync();
+    }
+
+    /// <summary>
+    /// フォルダグリッドで右クリックメニューが開かれるときの処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void folderRightClickMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        // 未分類を右クリックしたときは編集と削除を非表示
+        if (currentFolderIndex == folderGrid.RowCount - 1)
+        {
+            e.Cancel = true;
+        }
     }
     #endregion
 

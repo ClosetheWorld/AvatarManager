@@ -162,19 +162,20 @@
             folderRightClickMenu.Items.AddRange(new ToolStripItem[] { editMenuItem, deleteMenuItem });
             folderRightClickMenu.Name = "contextMenuStrip1";
             folderRightClickMenu.RenderMode = ToolStripRenderMode.System;
-            folderRightClickMenu.Size = new Size(99, 48);
+            folderRightClickMenu.Size = new Size(181, 70);
+            folderRightClickMenu.Opening += folderRightClickMenu_Opening;
             // 
             // editMenuItem
             // 
             editMenuItem.Name = "editMenuItem";
-            editMenuItem.Size = new Size(98, 22);
+            editMenuItem.Size = new Size(180, 22);
             editMenuItem.Text = "編集";
             editMenuItem.Click += editMenuItem_Click;
             // 
             // deleteMenuItem
             // 
             deleteMenuItem.Name = "deleteMenuItem";
-            deleteMenuItem.Size = new Size(98, 22);
+            deleteMenuItem.Size = new Size(180, 22);
             deleteMenuItem.Text = "削除";
             deleteMenuItem.Click += deleteMenuItem_Click;
             // 
