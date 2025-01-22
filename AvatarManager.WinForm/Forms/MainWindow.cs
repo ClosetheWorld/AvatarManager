@@ -1,7 +1,6 @@
 using AvatarManager.Core.Helper;
 using AvatarManager.Core.Infrastructures.Database;
 using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
-using AvatarManager.Core.Models;
 using AvatarManager.Core.Services.interfaces;
 using AvatarManager.WinForm.Forms;
 using AvatarManager.WinForm.Properties;
@@ -72,7 +71,8 @@ public partial class MainWindow : Form
     private async void MainWindow_Shown(object sender, EventArgs e)
     {
         // avatar キャッシュ処理
-        await CacheAllAvatarsAsync();
+        var load = new LoadingForm(_user, _vrcApi, _avatarService, _imageService);
+        load.ShowDialog();
 
         // folderGridView 生成
         await GenerateFolderGridAsync();
@@ -243,54 +243,6 @@ public partial class MainWindow : Form
             var i = avatarGrid.Rows.Add(new Bitmap(c.ImagePath), c.Name, c.Id);
             avatarGrid.Rows[i].Height = 70;
             avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
-        }
-    }
-
-    /// <summary>
-    /// 未キャッシュのアバターをすべてキャッシュする
-    /// </summary>
-    /// <returns></returns>
-    private async Task CacheAllAvatarsAsync()
-    {
-        var avatars = _vrcApi.GetAvatars(_user.Id);
-
-        // distinct avatars from api
-        var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
-        foreach (var c in cachedAvatars)
-        {
-            var a = avatars.FirstOrDefault(x => x.Id == c.Id);
-            if (a == null)
-            {
-                continue;
-            }
-            // update cached avatar
-            if (a.Name != c.Name || a.ThumbnailImageUrl != c.ThumbnailImageUrl)
-            {
-                await _avatarService.UpdateCachedAvatarAsync(
-                    new OwnedAvatar
-                    {
-                        Id = a.Id,
-                        Name = a.Name,
-                        ThumbnailImageUrl = a.ThumbnailImageUrl
-                    },
-                    await _imageService.DownloadAndCacheImageAsync(a.Id, a.ThumbnailImageUrl));
-            }
-
-            avatars.Remove(a);
-        }
-
-        // cache new avatars
-        foreach (var avatar in avatars)
-        {
-            var imagePath = await _imageService.DownloadAndCacheImageAsync(avatar.Id, avatar.ThumbnailImageUrl);
-
-            await _avatarService.CacheAvatarAsync(new OwnedAvatar
-            {
-                Id = avatar.Id,
-                Name = avatar.Name,
-                ThumbnailImageUrl = avatar.ThumbnailImageUrl,
-                ImagePath = imagePath
-            });
         }
     }
     #endregion

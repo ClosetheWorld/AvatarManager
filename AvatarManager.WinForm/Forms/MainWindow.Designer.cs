@@ -116,6 +116,7 @@
             folderGrid.AllowUserToAddRows = false;
             folderGrid.AllowUserToDeleteRows = false;
             folderGrid.AllowUserToResizeRows = false;
+            folderGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             folderGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             folderGrid.ColumnHeadersVisible = false;
             folderGrid.Columns.AddRange(new DataGridViewColumn[] { Folders, FolderId });
@@ -146,6 +147,7 @@
             // 
             // settingButton
             // 
+            settingButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             settingButton.Font = new Font("Yu Gothic UI Light", 12F);
             settingButton.Location = new Point(12, 515);
             settingButton.Name = "settingButton";
@@ -186,6 +188,7 @@
             Controls.Add(avatarGrid);
             Controls.Add(loginPlaceHolder);
             Controls.Add(userName);
+            MaximumSize = new Size(800, 2160);
             MinimumSize = new Size(800, 600);
             Name = "MainWindow";
             Text = "AvatarManager";
