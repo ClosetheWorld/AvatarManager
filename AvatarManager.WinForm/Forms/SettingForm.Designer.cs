@@ -111,7 +111,7 @@
             isSelectedDataGridViewCheckBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             isSelectedDataGridViewCheckBoxColumn.DataPropertyName = "IsSelected";
             isSelectedDataGridViewCheckBoxColumn.FillWeight = 5F;
-            isSelectedDataGridViewCheckBoxColumn.HeaderText = "IsSelected";
+            isSelectedDataGridViewCheckBoxColumn.HeaderText = "";
             isSelectedDataGridViewCheckBoxColumn.Name = "isSelectedDataGridViewCheckBoxColumn";
             isSelectedDataGridViewCheckBoxColumn.ReadOnly = true;
             isSelectedDataGridViewCheckBoxColumn.Resizable = DataGridViewTriState.False;
@@ -121,7 +121,7 @@
             avatarThumbnailDataGridViewImageColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             avatarThumbnailDataGridViewImageColumn.DataPropertyName = "AvatarThumbnail";
             avatarThumbnailDataGridViewImageColumn.FillWeight = 25F;
-            avatarThumbnailDataGridViewImageColumn.HeaderText = "AvatarThumbnail";
+            avatarThumbnailDataGridViewImageColumn.HeaderText = "サムネイル";
             avatarThumbnailDataGridViewImageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
             avatarThumbnailDataGridViewImageColumn.Name = "avatarThumbnailDataGridViewImageColumn";
             avatarThumbnailDataGridViewImageColumn.ReadOnly = true;
@@ -131,7 +131,7 @@
             avatarNameDataGridViewTextBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             avatarNameDataGridViewTextBoxColumn.DataPropertyName = "AvatarName";
             avatarNameDataGridViewTextBoxColumn.FillWeight = 75F;
-            avatarNameDataGridViewTextBoxColumn.HeaderText = "AvatarName";
+            avatarNameDataGridViewTextBoxColumn.HeaderText = "アバター名";
             avatarNameDataGridViewTextBoxColumn.Name = "avatarNameDataGridViewTextBoxColumn";
             avatarNameDataGridViewTextBoxColumn.ReadOnly = true;
             // 
