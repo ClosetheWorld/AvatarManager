@@ -1,5 +1,7 @@
 ﻿using AvatarManager.Core.Models;
+using AvatarManager.Core.Models.Binding;
 using AvatarManager.Core.Services.interfaces;
+using System.ComponentModel;
 
 namespace AvatarManager.WinForm.Forms
 {
@@ -8,6 +10,7 @@ namespace AvatarManager.WinForm.Forms
         private readonly IAvatarService _avatarService;
         private readonly IFolderService _folderService;
         private string? _folderId;
+        private BindingList<EditFormAvatarGrid> _grid = new BindingList<EditFormAvatarGrid>();
 
         public SettingForm(IAvatarService avatarService, IFolderService folderService, string? folderId)
         {
@@ -16,8 +19,6 @@ namespace AvatarManager.WinForm.Forms
             _folderId = folderId;
 
             InitializeComponent();
-            avatarGrid.Columns[1].ReadOnly = true;
-            avatarGrid.Columns[2].ReadOnly = true;
         }
 
         #region EventHandlers
@@ -32,9 +33,10 @@ namespace AvatarManager.WinForm.Forms
             if (_folderId != null)
             {
                 await SetFolderNameAsync();
-                await SetAvatarGridCheckBoxAsync();
                 this.Text = "フォルダ編集";
             }
+            
+            avatarGrid.DataSource = _grid;
         }
 
         /// <summary>
@@ -75,6 +77,12 @@ namespace AvatarManager.WinForm.Forms
             this.Close();
             this.Dispose();
         }
+
+
+        private async void searchTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region Methods
@@ -87,8 +95,13 @@ namespace AvatarManager.WinForm.Forms
             var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
             foreach (var c in cachedAvatars)
             {
-                var row = avatarGrid.Rows.Add(null, new Bitmap(c.ImagePath), c.Name, c.Id);
-                avatarGrid.Rows[row].Height = 70;
+                _grid.Add(new EditFormAvatarGrid
+                {
+                    IsSelected = await SetAvatarGridCheckBoxAsync(c.Id),
+                    AvatarThumbnail = new Bitmap(c.ImagePath),
+                    AvatarName = c.Name,
+                    AvatarId = c.Id
+                });
             }
         }
 
@@ -105,16 +118,16 @@ namespace AvatarManager.WinForm.Forms
         /// アバターグリッドのチェックボックスを設定する
         /// </summary>
         /// <returns></returns>
-        private async Task SetAvatarGridCheckBoxAsync()
+        private async Task<bool> SetAvatarGridCheckBoxAsync(string avatarId)
         {
             var folder = await _folderService.GetFolderAsync(_folderId);
-            for (var i = 0; i < avatarGrid.Rows.Count; i++)
+
+            if (folder.ContainAvatarIds.Contains(avatarId))
             {
-                if (folder.ContainAvatarIds.Contains(avatarGrid.Rows[i].Cells[3].Value.ToString()))
-                {
-                    avatarGrid.Rows[i].Cells[0].Value = true;
-                }
+                return true;
             }
+
+            return false;
         }
         #endregion
     }

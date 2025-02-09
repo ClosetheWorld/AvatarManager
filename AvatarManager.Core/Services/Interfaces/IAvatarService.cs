@@ -4,6 +4,7 @@ namespace AvatarManager.Core.Services.interfaces;
 
 public interface IAvatarService
 {
+    Task<OwnedAvatar> GetCachedAvatarAsync(string id);
     Task<List<OwnedAvatar>> GetCachedAvatarsAsync();
     Task CacheAvatarAsync(OwnedAvatar avatar);
     Task<List<OwnedAvatar>> GetUnCategorizedAvatarsAsync();
