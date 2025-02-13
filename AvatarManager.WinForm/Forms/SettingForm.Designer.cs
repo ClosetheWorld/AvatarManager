@@ -28,16 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             avatarGrid = new DataGridView();
-            ContainsCheck = new DataGridViewCheckBoxColumn();
-            AvatarThumbnail = new DataGridViewImageColumn();
-            AvatarName = new DataGridViewTextBoxColumn();
-            AvatarId = new DataGridViewTextBoxColumn();
+            editFormAvatarGridBindingSource = new BindingSource(components);
             saveButton = new Button();
             label1 = new Label();
             label2 = new Label();
             folderNameTextBox = new TextBox();
+            isSelectedDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
+            avatarThumbnailDataGridViewImageColumn = new DataGridViewImageColumn();
+            avatarNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            avatarIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)avatarGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)editFormAvatarGridBindingSource).BeginInit();
             SuspendLayout();
             // 
             // avatarGrid
@@ -45,46 +48,22 @@
             avatarGrid.AllowUserToAddRows = false;
             avatarGrid.AllowUserToDeleteRows = false;
             avatarGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            avatarGrid.AutoGenerateColumns = false;
             avatarGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            avatarGrid.Columns.AddRange(new DataGridViewColumn[] { ContainsCheck, AvatarThumbnail, AvatarName, AvatarId });
+            avatarGrid.Columns.AddRange(new DataGridViewColumn[] { isSelectedDataGridViewCheckBoxColumn, avatarThumbnailDataGridViewImageColumn, avatarNameDataGridViewTextBoxColumn, avatarIdDataGridViewTextBoxColumn });
+            avatarGrid.DataSource = editFormAvatarGridBindingSource;
             avatarGrid.Location = new Point(12, 42);
             avatarGrid.MultiSelect = false;
             avatarGrid.Name = "avatarGrid";
             avatarGrid.RowHeadersVisible = false;
             avatarGrid.RowHeadersWidth = 45;
+            avatarGrid.RowTemplate.Height = 70;
             avatarGrid.Size = new Size(776, 346);
             avatarGrid.TabIndex = 7;
             // 
-            // ContainsCheck
+            // editFormAvatarGridBindingSource
             // 
-            ContainsCheck.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            ContainsCheck.FillWeight = 5F;
-            ContainsCheck.HeaderText = "";
-            ContainsCheck.Name = "ContainsCheck";
-            ContainsCheck.Resizable = DataGridViewTriState.False;
-            // 
-            // AvatarThumbnail
-            // 
-            AvatarThumbnail.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            AvatarThumbnail.FillWeight = 25F;
-            AvatarThumbnail.HeaderText = "サムネイル";
-            AvatarThumbnail.ImageLayout = DataGridViewImageCellLayout.Zoom;
-            AvatarThumbnail.Name = "AvatarThumbnail";
-            AvatarThumbnail.Resizable = DataGridViewTriState.False;
-            // 
-            // AvatarName
-            // 
-            AvatarName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            AvatarName.FillWeight = 70F;
-            AvatarName.HeaderText = "アバター名";
-            AvatarName.Name = "AvatarName";
-            // 
-            // AvatarId
-            // 
-            AvatarId.HeaderText = "";
-            AvatarId.Name = "AvatarId";
-            AvatarId.Visible = false;
-            AvatarId.Width = 5;
+            editFormAvatarGridBindingSource.DataSource = typeof(Core.Models.Binding.EditFormAvatarGrid);
             // 
             // saveButton
             // 
@@ -126,6 +105,43 @@
             folderNameTextBox.Size = new Size(275, 29);
             folderNameTextBox.TabIndex = 10;
             // 
+            // isSelectedDataGridViewCheckBoxColumn
+            // 
+            isSelectedDataGridViewCheckBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            isSelectedDataGridViewCheckBoxColumn.DataPropertyName = "IsSelected";
+            isSelectedDataGridViewCheckBoxColumn.FillWeight = 5F;
+            isSelectedDataGridViewCheckBoxColumn.Frozen = true;
+            isSelectedDataGridViewCheckBoxColumn.HeaderText = "";
+            isSelectedDataGridViewCheckBoxColumn.Name = "isSelectedDataGridViewCheckBoxColumn";
+            isSelectedDataGridViewCheckBoxColumn.Resizable = DataGridViewTriState.False;
+            isSelectedDataGridViewCheckBoxColumn.Width = 37;
+            // 
+            // avatarThumbnailDataGridViewImageColumn
+            // 
+            avatarThumbnailDataGridViewImageColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            avatarThumbnailDataGridViewImageColumn.DataPropertyName = "AvatarThumbnail";
+            avatarThumbnailDataGridViewImageColumn.FillWeight = 25F;
+            avatarThumbnailDataGridViewImageColumn.HeaderText = "サムネイル";
+            avatarThumbnailDataGridViewImageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            avatarThumbnailDataGridViewImageColumn.Name = "avatarThumbnailDataGridViewImageColumn";
+            avatarThumbnailDataGridViewImageColumn.Resizable = DataGridViewTriState.False;
+            // 
+            // avatarNameDataGridViewTextBoxColumn
+            // 
+            avatarNameDataGridViewTextBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            avatarNameDataGridViewTextBoxColumn.DataPropertyName = "AvatarName";
+            avatarNameDataGridViewTextBoxColumn.FillWeight = 75F;
+            avatarNameDataGridViewTextBoxColumn.HeaderText = "アバター名";
+            avatarNameDataGridViewTextBoxColumn.Name = "avatarNameDataGridViewTextBoxColumn";
+            avatarNameDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.False;
+            // 
+            // avatarIdDataGridViewTextBoxColumn
+            // 
+            avatarIdDataGridViewTextBoxColumn.DataPropertyName = "AvatarId";
+            avatarIdDataGridViewTextBoxColumn.HeaderText = "AvatarId";
+            avatarIdDataGridViewTextBoxColumn.Name = "avatarIdDataGridViewTextBoxColumn";
+            avatarIdDataGridViewTextBoxColumn.Visible = false;
+            // 
             // SettingForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -140,6 +156,7 @@
             Text = "フォルダ追加";
             Shown += SettingForm_Shown;
             ((System.ComponentModel.ISupportInitialize)avatarGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)editFormAvatarGridBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -154,5 +171,10 @@
         private Label label1;
         private Label label2;
         private TextBox folderNameTextBox;
+        private BindingSource editFormAvatarGridBindingSource;
+        private DataGridViewCheckBoxColumn isSelectedDataGridViewCheckBoxColumn;
+        private DataGridViewImageColumn avatarThumbnailDataGridViewImageColumn;
+        private DataGridViewTextBoxColumn avatarNameDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn avatarIdDataGridViewTextBoxColumn;
     }
 }

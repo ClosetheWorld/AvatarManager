@@ -13,6 +13,11 @@ public class AvatarService : IAvatarService
         _dbContext = dbContext;
     }
 
+    public async Task<OwnedAvatar> GetCachedAvatarAsync(string id)
+    {
+        return await _dbContext.OwnedAvatars.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task<List<OwnedAvatar>> GetCachedAvatarsAsync()
     {
         return await _dbContext.OwnedAvatars.ToListAsync();
