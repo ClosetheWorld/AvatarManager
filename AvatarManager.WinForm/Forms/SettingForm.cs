@@ -1,7 +1,6 @@
 ﻿using AvatarManager.Core.Models;
-using AvatarManager.Core.Models.Binding;
 using AvatarManager.Core.Services.interfaces;
-using System.ComponentModel;
+using System.Data;
 
 namespace AvatarManager.WinForm.Forms
 {
@@ -10,7 +9,8 @@ namespace AvatarManager.WinForm.Forms
         private readonly IAvatarService _avatarService;
         private readonly IFolderService _folderService;
         private string? _folderId;
-        private BindingList<EditFormAvatarGrid> _grid = new BindingList<EditFormAvatarGrid>();
+        private DataTable _dataTable = new DataTable();
+        private BindingSource _bindingSource = new BindingSource();
 
         public SettingForm(IAvatarService avatarService, IFolderService folderService, string? folderId)
         {
@@ -35,8 +35,9 @@ namespace AvatarManager.WinForm.Forms
                 await SetFolderNameAsync();
                 this.Text = "フォルダ編集";
             }
-            
-            avatarGrid.DataSource = _grid;
+
+            _bindingSource.DataSource = _dataTable;
+            editFormAvatarGridBindingSource.DataSource = _bindingSource;
         }
 
         /// <summary>
@@ -77,12 +78,6 @@ namespace AvatarManager.WinForm.Forms
             this.Close();
             this.Dispose();
         }
-
-
-        private async void searchTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
         #endregion
 
         #region Methods
@@ -93,15 +88,19 @@ namespace AvatarManager.WinForm.Forms
         private async Task GenerateAllAvatarGridAsync()
         {
             var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
+            _dataTable.Columns.Add("IsSelected", typeof(bool));
+            _dataTable.Columns.Add("AvatarThumbnail", typeof(Bitmap));
+            _dataTable.Columns.Add("AvatarName", typeof(string));
+            _dataTable.Columns.Add("AvatarId", typeof(string));
+
             foreach (var c in cachedAvatars)
             {
-                _grid.Add(new EditFormAvatarGrid
-                {
-                    IsSelected = await SetAvatarGridCheckBoxAsync(c.Id),
-                    AvatarThumbnail = new Bitmap(c.ImagePath),
-                    AvatarName = c.Name,
-                    AvatarId = c.Id
-                });
+                var row = _dataTable.NewRow();
+                row["IsSelected"] = string.IsNullOrEmpty(_folderId) ? false : await SetAvatarGridCheckBoxAsync(c.Id);
+                row["AvatarThumbnail"] = new Bitmap(c.ImagePath);
+                row["AvatarName"] = c.Name;
+                row["AvatarId"] = c.Id;
+                _dataTable.Rows.Add(row);
             }
         }
 

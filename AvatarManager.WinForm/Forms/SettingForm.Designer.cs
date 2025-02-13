@@ -55,7 +55,6 @@
             avatarGrid.Location = new Point(12, 42);
             avatarGrid.MultiSelect = false;
             avatarGrid.Name = "avatarGrid";
-            avatarGrid.ReadOnly = true;
             avatarGrid.RowHeadersVisible = false;
             avatarGrid.RowHeadersWidth = 45;
             avatarGrid.RowTemplate.Height = 70;
@@ -108,13 +107,14 @@
             // 
             // isSelectedDataGridViewCheckBoxColumn
             // 
-            isSelectedDataGridViewCheckBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            isSelectedDataGridViewCheckBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             isSelectedDataGridViewCheckBoxColumn.DataPropertyName = "IsSelected";
             isSelectedDataGridViewCheckBoxColumn.FillWeight = 5F;
+            isSelectedDataGridViewCheckBoxColumn.Frozen = true;
             isSelectedDataGridViewCheckBoxColumn.HeaderText = "";
             isSelectedDataGridViewCheckBoxColumn.Name = "isSelectedDataGridViewCheckBoxColumn";
-            isSelectedDataGridViewCheckBoxColumn.ReadOnly = true;
             isSelectedDataGridViewCheckBoxColumn.Resizable = DataGridViewTriState.False;
+            isSelectedDataGridViewCheckBoxColumn.Width = 37;
             // 
             // avatarThumbnailDataGridViewImageColumn
             // 
@@ -124,7 +124,7 @@
             avatarThumbnailDataGridViewImageColumn.HeaderText = "サムネイル";
             avatarThumbnailDataGridViewImageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
             avatarThumbnailDataGridViewImageColumn.Name = "avatarThumbnailDataGridViewImageColumn";
-            avatarThumbnailDataGridViewImageColumn.ReadOnly = true;
+            avatarThumbnailDataGridViewImageColumn.Resizable = DataGridViewTriState.False;
             // 
             // avatarNameDataGridViewTextBoxColumn
             // 
@@ -133,14 +133,13 @@
             avatarNameDataGridViewTextBoxColumn.FillWeight = 75F;
             avatarNameDataGridViewTextBoxColumn.HeaderText = "アバター名";
             avatarNameDataGridViewTextBoxColumn.Name = "avatarNameDataGridViewTextBoxColumn";
-            avatarNameDataGridViewTextBoxColumn.ReadOnly = true;
+            avatarNameDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.False;
             // 
             // avatarIdDataGridViewTextBoxColumn
             // 
             avatarIdDataGridViewTextBoxColumn.DataPropertyName = "AvatarId";
             avatarIdDataGridViewTextBoxColumn.HeaderText = "AvatarId";
             avatarIdDataGridViewTextBoxColumn.Name = "avatarIdDataGridViewTextBoxColumn";
-            avatarIdDataGridViewTextBoxColumn.ReadOnly = true;
             avatarIdDataGridViewTextBoxColumn.Visible = false;
             // 
             // SettingForm
