@@ -30,15 +30,17 @@
         {
             components = new System.ComponentModel.Container();
             avatarGrid = new DataGridView();
-            editFormAvatarGridBindingSource = new BindingSource(components);
-            saveButton = new Button();
-            label1 = new Label();
-            label2 = new Label();
-            folderNameTextBox = new TextBox();
             isSelectedDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
             avatarThumbnailDataGridViewImageColumn = new DataGridViewImageColumn();
             avatarNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             avatarIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            editFormAvatarGridBindingSource = new BindingSource(components);
+            saveButton = new Button();
+            introLabel = new Label();
+            folderNameLabel = new Label();
+            folderNameTextBox = new TextBox();
+            searchTextBox = new TextBox();
+            avatarSearchLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)avatarGrid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)editFormAvatarGridBindingSource).BeginInit();
             SuspendLayout();
@@ -52,58 +54,14 @@
             avatarGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             avatarGrid.Columns.AddRange(new DataGridViewColumn[] { isSelectedDataGridViewCheckBoxColumn, avatarThumbnailDataGridViewImageColumn, avatarNameDataGridViewTextBoxColumn, avatarIdDataGridViewTextBoxColumn });
             avatarGrid.DataSource = editFormAvatarGridBindingSource;
-            avatarGrid.Location = new Point(12, 42);
+            avatarGrid.Location = new Point(12, 70);
             avatarGrid.MultiSelect = false;
             avatarGrid.Name = "avatarGrid";
             avatarGrid.RowHeadersVisible = false;
             avatarGrid.RowHeadersWidth = 45;
             avatarGrid.RowTemplate.Height = 70;
-            avatarGrid.Size = new Size(776, 346);
+            avatarGrid.Size = new Size(776, 406);
             avatarGrid.TabIndex = 7;
-            // 
-            // editFormAvatarGridBindingSource
-            // 
-            editFormAvatarGridBindingSource.DataSource = typeof(Core.Models.Binding.EditFormAvatarGrid);
-            // 
-            // saveButton
-            // 
-            saveButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            saveButton.Font = new Font("Yu Gothic UI", 12F);
-            saveButton.Location = new Point(12, 394);
-            saveButton.Name = "saveButton";
-            saveButton.Size = new Size(776, 44);
-            saveButton.TabIndex = 6;
-            saveButton.Text = "保存";
-            saveButton.UseVisualStyleBackColor = true;
-            saveButton.Click += saveButton_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Yu Gothic UI", 12F);
-            label1.Location = new Point(503, 9);
-            label1.Name = "label1";
-            label1.Size = new Size(285, 21);
-            label1.TabIndex = 8;
-            label1.Text = "フォルダに含めるアバターをチェックしてください";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Yu Gothic UI", 12F);
-            label2.Location = new Point(12, 9);
-            label2.Name = "label2";
-            label2.Size = new Size(74, 21);
-            label2.TabIndex = 9;
-            label2.Text = "フォルダ名";
-            // 
-            // folderNameTextBox
-            // 
-            folderNameTextBox.Font = new Font("Yu Gothic UI", 12F);
-            folderNameTextBox.Location = new Point(92, 6);
-            folderNameTextBox.Name = "folderNameTextBox";
-            folderNameTextBox.Size = new Size(275, 29);
-            folderNameTextBox.TabIndex = 10;
             // 
             // isSelectedDataGridViewCheckBoxColumn
             // 
@@ -142,15 +100,83 @@
             avatarIdDataGridViewTextBoxColumn.Name = "avatarIdDataGridViewTextBoxColumn";
             avatarIdDataGridViewTextBoxColumn.Visible = false;
             // 
+            // editFormAvatarGridBindingSource
+            // 
+            editFormAvatarGridBindingSource.DataSource = typeof(Core.Models.Binding.EditFormAvatarGrid);
+            // 
+            // saveButton
+            // 
+            saveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            saveButton.Font = new Font("Yu Gothic UI", 12F);
+            saveButton.Location = new Point(12, 482);
+            saveButton.Name = "saveButton";
+            saveButton.Size = new Size(776, 44);
+            saveButton.TabIndex = 6;
+            saveButton.Text = "保存";
+            saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += saveButton_Click;
+            // 
+            // introLabel
+            // 
+            introLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            introLabel.AutoSize = true;
+            introLabel.Font = new Font("Yu Gothic UI", 12F);
+            introLabel.Location = new Point(503, 46);
+            introLabel.Name = "introLabel";
+            introLabel.Size = new Size(285, 21);
+            introLabel.TabIndex = 8;
+            introLabel.Text = "フォルダに含めるアバターをチェックしてください";
+            // 
+            // folderNameLabel
+            // 
+            folderNameLabel.AutoSize = true;
+            folderNameLabel.Font = new Font("Yu Gothic UI", 12F);
+            folderNameLabel.Location = new Point(12, 9);
+            folderNameLabel.Name = "folderNameLabel";
+            folderNameLabel.Size = new Size(74, 21);
+            folderNameLabel.TabIndex = 9;
+            folderNameLabel.Text = "フォルダ名";
+            // 
+            // folderNameTextBox
+            // 
+            folderNameTextBox.Font = new Font("Yu Gothic UI", 12F);
+            folderNameTextBox.Location = new Point(92, 6);
+            folderNameTextBox.Name = "folderNameTextBox";
+            folderNameTextBox.Size = new Size(275, 29);
+            folderNameTextBox.TabIndex = 10;
+            // 
+            // searchTextBox
+            // 
+            searchTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            searchTextBox.Font = new Font("Yu Gothic UI", 12F);
+            searchTextBox.Location = new Point(577, 9);
+            searchTextBox.Name = "searchTextBox";
+            searchTextBox.Size = new Size(211, 29);
+            searchTextBox.TabIndex = 11;
+            searchTextBox.TextChanged += searchTextBox_TextChanged;
+            // 
+            // avatarSearchLabel
+            // 
+            avatarSearchLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            avatarSearchLabel.AutoSize = true;
+            avatarSearchLabel.Font = new Font("Yu Gothic UI", 12F);
+            avatarSearchLabel.Location = new Point(453, 12);
+            avatarSearchLabel.Name = "avatarSearchLabel";
+            avatarSearchLabel.Size = new Size(118, 21);
+            avatarSearchLabel.TabIndex = 12;
+            avatarSearchLabel.Text = "アバター名で検索";
+            // 
             // SettingForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(folderNameTextBox);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            ClientSize = new Size(800, 538);
             Controls.Add(avatarGrid);
+            Controls.Add(avatarSearchLabel);
+            Controls.Add(searchTextBox);
+            Controls.Add(folderNameTextBox);
+            Controls.Add(folderNameLabel);
+            Controls.Add(introLabel);
             Controls.Add(saveButton);
             Name = "SettingForm";
             Text = "フォルダ追加";
@@ -162,15 +188,15 @@
         }
 
         #endregion
-        private DataGridView avatarGrid;
-        private DataGridViewCheckBoxColumn ContainsCheck;
-        private DataGridViewImageColumn AvatarThumbnail;
-        private DataGridViewTextBoxColumn AvatarName;
-        private DataGridViewTextBoxColumn AvatarId;
         private Button saveButton;
+        private Label introLabel;
+        private Label folderNameLabel;
+        private TextBox folderNameTextBox;
+        private TextBox searchTextBox;
+        private Label avatarSearchLabel;
+        private DataGridView avatarGrid;
         private Label label1;
         private Label label2;
-        private TextBox folderNameTextBox;
         private BindingSource editFormAvatarGridBindingSource;
         private DataGridViewCheckBoxColumn isSelectedDataGridViewCheckBoxColumn;
         private DataGridViewImageColumn avatarThumbnailDataGridViewImageColumn;
