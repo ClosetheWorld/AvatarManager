@@ -149,7 +149,7 @@
             // 
             searchTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             searchTextBox.Font = new Font("Yu Gothic UI", 12F);
-            searchTextBox.Location = new Point(577, 9);
+            searchTextBox.Location = new Point(577, 6);
             searchTextBox.Name = "searchTextBox";
             searchTextBox.Size = new Size(211, 29);
             searchTextBox.TabIndex = 11;
@@ -160,7 +160,7 @@
             avatarSearchLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             avatarSearchLabel.AutoSize = true;
             avatarSearchLabel.Font = new Font("Yu Gothic UI", 12F);
-            avatarSearchLabel.Location = new Point(453, 12);
+            avatarSearchLabel.Location = new Point(453, 9);
             avatarSearchLabel.Name = "avatarSearchLabel";
             avatarSearchLabel.Size = new Size(118, 21);
             avatarSearchLabel.TabIndex = 12;
