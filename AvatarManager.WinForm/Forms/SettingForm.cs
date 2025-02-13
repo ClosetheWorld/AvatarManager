@@ -78,6 +78,17 @@ namespace AvatarManager.WinForm.Forms
             this.Close();
             this.Dispose();
         }
+
+        /// <summary>
+        /// 検索ワードが変更された時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void searchTextBox_TextChanged(object sender, EventArgs e)
+        {
+            _bindingSource.Filter = $"AvatarName like '%{searchTextBox.Text}%'";
+        }
+
         #endregion
 
         #region Methods

@@ -147,12 +147,13 @@
             // 
             // searchTextBox
             // 
-            searchTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            searchTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             searchTextBox.Font = new Font("Yu Gothic UI", 12F);
             searchTextBox.Location = new Point(577, 9);
             searchTextBox.Name = "searchTextBox";
             searchTextBox.Size = new Size(211, 29);
             searchTextBox.TabIndex = 11;
+            searchTextBox.TextChanged += searchTextBox_TextChanged;
             // 
             // avatarSearchLabel
             // 
