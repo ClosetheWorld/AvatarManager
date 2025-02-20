@@ -5,6 +5,8 @@ using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
 using AvatarManager.Core.Services;
 using AvatarManager.Core.Services.interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AvatarManager.Winform;
@@ -25,6 +27,7 @@ internal static class Program
         ServiceCollection services = new ServiceCollection();
         ConfigureServices(services);
         ServiceProvider serviceProvider = services.BuildServiceProvider();
+        EnsureCreateDatabase(serviceProvider.GetRequiredService<ApplicationDbContext>());
 
         MainWindow main = (MainWindow)serviceProvider.GetRequiredService<MainWindow>();
         Application.Run(main);
@@ -54,5 +57,14 @@ internal static class Program
         {
             Directory.CreateDirectory("Data/CachedImages");
         }
+    }
+
+    private static void EnsureCreateDatabase(ApplicationDbContext db)
+    {
+        db.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\"\r\n(MigrationId, ProductVersion)\r\nVALUES('20241224080145_init', '8.0.11');");
+
+        var mig = db.Database as IInfrastructure<IServiceProvider>;
+        var migrator = mig.Instance.GetService<IMigrator>();
+        migrator.Migrate();
     }
 }
