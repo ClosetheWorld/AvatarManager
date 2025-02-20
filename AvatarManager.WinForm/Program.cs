@@ -23,7 +23,7 @@ internal static class Program
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
 
-        EnsureCreateDirectorys();
+        EnsureCreateDirectories();
         ServiceCollection services = new ServiceCollection();
         ConfigureServices(services);
         ServiceProvider serviceProvider = services.BuildServiceProvider();
@@ -46,7 +46,7 @@ internal static class Program
         });
     }
 
-    private static void EnsureCreateDirectorys()
+    private static void EnsureCreateDirectories()
     {
         if (!Directory.Exists("Data"))
         {
