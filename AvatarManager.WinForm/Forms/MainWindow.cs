@@ -52,10 +52,7 @@ public partial class MainWindow : Form
             }
             catch (Exception e)
             {
-                Settings.Default.Reset();
-                MessageBox.Show("認証に失敗しました。再度ログインしてください。");
-                var auth = new AuthForm(_vrcApi);
-                auth.ShowDialog();
+                HandleAuthException("認証に失敗しました。再度ログインしてください。");
             }
             _user = _vrcApi.GetCurrentUser();
         }
@@ -124,7 +121,14 @@ public partial class MainWindow : Form
         // avatarGridのヘッダーがクリックされた場合は何もしない
         if (e.RowIndex >= 0)
         {
-            await _vrcApi.SetCurrentAvatarAsync(avatarGrid.Rows[e.RowIndex].Cells[2].Value.ToString());
+            try
+            {
+                await _vrcApi.SetCurrentAvatarAsync(avatarGrid.Rows[e.RowIndex].Cells[2].Value.ToString());
+            }
+            catch (Exception ex)
+            {
+                HandleAuthException("アバターの切り替えに失敗しました。認証情報が切れている可能性があります。");
+            }
         }
     }
 
@@ -260,6 +264,18 @@ public partial class MainWindow : Form
             avatarGrid.Rows[i].Height = 70;
             avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
         }
+    }
+
+    /// <summary>
+    /// 認証エラー時の処理
+    /// </summary>
+    private void HandleAuthException(string msg)
+    {
+        Settings.Default.Reset();
+        MessageBox.Show(msg, "認証エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        var auth = new AuthForm(_vrcApi);
+        auth.ShowDialog();
+        _user = _vrcApi.GetCurrentUser();
     }
     #endregion
 }
