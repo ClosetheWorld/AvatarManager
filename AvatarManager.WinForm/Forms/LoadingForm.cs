@@ -63,6 +63,7 @@ namespace AvatarManager.WinForm.Forms
                 var a = avatars.FirstOrDefault(x => x.Id == c.Id);
                 if (a == null)
                 {
+                    await _avatarService.DeleteCachedAvatarAsync(c.Id);
                     continue;
                 }
                 // update cached avatar
@@ -78,7 +79,7 @@ namespace AvatarManager.WinForm.Forms
                         await _imageService.DownloadAndCacheImageAsync(a.Id, a.ThumbnailImageUrl));
                 }
 
-                avatars.Remove(a);
+                avatars.Remove(a);               
             }
 
             // cache new avatars

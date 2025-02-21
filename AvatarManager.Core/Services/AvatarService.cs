@@ -74,4 +74,23 @@ public class AvatarService : IAvatarService
             await _dbContext.SaveChangesAsync();
         }
     }
+    public async Task DeleteCachedAvatarAsync(string id)
+    {
+        var avatar = await _dbContext.OwnedAvatars.FirstOrDefaultAsync(x => x.Id == id);
+        if (avatar != null)
+        {
+            _dbContext.OwnedAvatars.Remove(avatar);
+            var folders = await _dbContext.Folders.ToListAsync();
+            foreach (var f in folders)
+            {
+                if (f.ContainAvatarIds.Contains(id))
+                {
+                    f.ContainAvatarIds.Remove(id);
+                    _dbContext.Folders.Update(f);
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+    }
 }
