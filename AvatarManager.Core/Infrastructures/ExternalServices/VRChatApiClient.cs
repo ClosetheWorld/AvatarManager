@@ -27,7 +27,7 @@ public class VRChatApiClient : IVRChatApiClient
 
         _authenticationApi = new AuthenticationApi(_apiClient, _apiClient, _configuration);
         _httpClient.DefaultRequestHeaders.Add("Cookie", $"auth={authToken}");
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", "AvatarManager/0.0.1");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "AvatarManager/1.0.4");
     }
 
     public bool Auth()
