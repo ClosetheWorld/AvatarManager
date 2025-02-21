@@ -34,12 +34,9 @@ namespace AvatarManager.Core.Migrations
                     b.ToTable("Folders");
                 });
 
-            modelBuilder.Entity("AvatarManager.Core.Models.OwnedAvatar", b =>
+            modelBuilder.Entity("AvatarManager.Core.Models.OwnedAvatars", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImagePath")
