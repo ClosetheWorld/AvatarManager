@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public string ThumbnailImageUrl { get; set; }
         public string ImagePath { get; set; }
+        public string? DisplayName { get; set; }
     }
 }
