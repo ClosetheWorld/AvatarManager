@@ -16,6 +16,11 @@ namespace AvatarManager.WinForm.Forms
         }
 
         #region EventHandlers
+        /// <summary>
+        /// 保存ボタンを押したときの処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void saveButton_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(displayNameTextBox.Text))
@@ -29,6 +34,19 @@ namespace AvatarManager.WinForm.Forms
 
             Close();
             Dispose();
+        }
+
+        /// <summary>
+        /// Enterキーを押したときの処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void displayNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                this.saveButton_Click(sender, e);
+            }
         }
         #endregion
     }

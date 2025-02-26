@@ -53,6 +53,7 @@
             displayNameTextBox.Name = "displayNameTextBox";
             displayNameTextBox.Size = new Size(360, 29);
             displayNameTextBox.TabIndex = 12;
+            displayNameTextBox.KeyDown += displayNameTextBox_KeyDown;
             // 
             // saveButton
             // 
