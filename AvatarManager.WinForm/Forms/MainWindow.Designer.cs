@@ -42,9 +42,12 @@
             folderRightClickMenu = new ContextMenuStrip(components);
             editMenuItem = new ToolStripMenuItem();
             deleteMenuItem = new ToolStripMenuItem();
+            avatarRightClickMenu = new ContextMenuStrip(components);
+            editAvatarDisplayNameMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)avatarGrid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)folderGrid).BeginInit();
             folderRightClickMenu.SuspendLayout();
+            avatarRightClickMenu.SuspendLayout();
             SuspendLayout();
             // 
             // userName
@@ -162,22 +165,36 @@
             folderRightClickMenu.Items.AddRange(new ToolStripItem[] { editMenuItem, deleteMenuItem });
             folderRightClickMenu.Name = "contextMenuStrip1";
             folderRightClickMenu.RenderMode = ToolStripRenderMode.System;
-            folderRightClickMenu.Size = new Size(181, 70);
+            folderRightClickMenu.Size = new Size(99, 48);
             folderRightClickMenu.Opening += folderRightClickMenu_Opening;
             // 
             // editMenuItem
             // 
             editMenuItem.Name = "editMenuItem";
-            editMenuItem.Size = new Size(180, 22);
+            editMenuItem.Size = new Size(98, 22);
             editMenuItem.Text = "編集";
             editMenuItem.Click += editMenuItem_Click;
             // 
             // deleteMenuItem
             // 
             deleteMenuItem.Name = "deleteMenuItem";
-            deleteMenuItem.Size = new Size(180, 22);
+            deleteMenuItem.Size = new Size(98, 22);
             deleteMenuItem.Text = "削除";
             deleteMenuItem.Click += deleteMenuItem_Click;
+            // 
+            // avatarRightClickMenu
+            // 
+            avatarRightClickMenu.Items.AddRange(new ToolStripItem[] { editAvatarDisplayNameMenuItem });
+            avatarRightClickMenu.Name = "avatarRightClickMenu";
+            avatarRightClickMenu.RenderMode = ToolStripRenderMode.System;
+            avatarRightClickMenu.Size = new Size(181, 48);
+            // 
+            // editAvatarDisplayNameMenuItem
+            // 
+            editAvatarDisplayNameMenuItem.Name = "editAvatarDisplayNameMenuItem";
+            editAvatarDisplayNameMenuItem.Size = new Size(180, 22);
+            editAvatarDisplayNameMenuItem.Text = "表示名を編集";
+            editAvatarDisplayNameMenuItem.Click += editAvatarDisplayNameMenuItem_Click;
             // 
             // MainWindow
             // 
@@ -197,6 +214,7 @@
             ((System.ComponentModel.ISupportInitialize)avatarGrid).EndInit();
             ((System.ComponentModel.ISupportInitialize)folderGrid).EndInit();
             folderRightClickMenu.ResumeLayout(false);
+            avatarRightClickMenu.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -216,5 +234,7 @@
         private DataGridViewImageColumn AvatarThumbnail;
         private DataGridViewTextBoxColumn AvatarName;
         private DataGridViewTextBoxColumn AvatarId;
+        private ContextMenuStrip avatarRightClickMenu;
+        private ToolStripMenuItem editAvatarDisplayNameMenuItem;
     }
 }

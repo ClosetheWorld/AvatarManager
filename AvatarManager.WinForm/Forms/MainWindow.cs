@@ -164,7 +164,7 @@ public partial class MainWindow : Form
     }
 
     /// <summary>
-    /// フォルダグリッドで右クリックメニューが開かれるときの処理
+    /// folderGridで右クリックメニューが開かれるときの処理
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -175,6 +175,16 @@ public partial class MainWindow : Form
         {
             e.Cancel = true;
         }
+    }
+
+    /// <summary>
+    /// avatarGridで右クリックメニューの表示名を編集がクリックされたときの処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void editAvatarDisplayNameMenuItem_Click(object sender, EventArgs e)
+    {
+
     }
     #endregion
 
@@ -233,6 +243,7 @@ public partial class MainWindow : Form
                 var i = avatarGrid.Rows.Add(new Bitmap(a.ImagePath), a.Name, a.Id);
                 avatarGrid.Rows[i].Height = 70;
                 avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
+                avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
             }
         }
         else
@@ -243,6 +254,7 @@ public partial class MainWindow : Form
                 var i = avatarGrid.Rows.Add(new Bitmap(allAvatars.Single(x => x.Id == a).ImagePath), allAvatars.Single(x => x.Id == a).Name, a);
                 avatarGrid.Rows[i].Height = 70;
                 avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
+                avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
             }
         }
     }
