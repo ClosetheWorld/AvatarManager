@@ -64,6 +64,7 @@
             saveButton.TabIndex = 13;
             saveButton.Text = "保存";
             saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += saveButton_Click;
             // 
             // DisplayNameEditForm
             // 
