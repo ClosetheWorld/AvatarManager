@@ -251,7 +251,7 @@ public partial class MainWindow : Form
             var avatars = await _avatarService.GetUnCategorizedAvatarsAsync();
             foreach (var a in avatars)
             {
-                var i = avatarGrid.Rows.Add(new Bitmap(a.ImagePath), a.DisplayName ?? a.Name, a.Id);
+                var i = avatarGrid.Rows.Add(new Bitmap(a.ImagePath), a.DisplayName != null ? $"{a.DisplayName} ({a.Name})" : a.Name, a.Id);
                 avatarGrid.Rows[i].Height = 70;
                 avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
                 avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
@@ -283,7 +283,7 @@ public partial class MainWindow : Form
         cachedAvatars = await _avatarService.GetUnCategorizedAvatarsAsync();
         foreach (var c in cachedAvatars)
         {
-            var i = avatarGrid.Rows.Add(new Bitmap(c.ImagePath), c.Name, c.Id);
+            var i = avatarGrid.Rows.Add(new Bitmap(c.ImagePath), c.DisplayName != null ? $"{c.DisplayName} ({c.Name})" : c.Name, c.Id);
             avatarGrid.Rows[i].Height = 70;
             avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
         }
