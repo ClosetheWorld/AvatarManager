@@ -70,6 +70,7 @@ public partial class MainWindow : Form
     {
         // avatar ƒLƒƒƒbƒVƒ…ˆ—
         var load = new LoadingForm(_user, _vrcApi, _avatarService, _imageService);
+        load.StartPosition = FormStartPosition.CenterParent;
         load.ShowDialog();
 
         // folderGridView ¶¬
