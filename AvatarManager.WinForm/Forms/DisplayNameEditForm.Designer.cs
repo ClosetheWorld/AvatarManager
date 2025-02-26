@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             introductionLabel = new Label();
-            searchTextBox = new TextBox();
+            displayNameTextBox = new TextBox();
             saveButton = new Button();
             SuspendLayout();
             // 
@@ -45,14 +45,14 @@
             introductionLabel.Text = "設定する表示名を入力してください";
             introductionLabel.UseWaitCursor = true;
             // 
-            // searchTextBox
+            // displayNameTextBox
             // 
-            searchTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            searchTextBox.Font = new Font("Yu Gothic UI", 12F);
-            searchTextBox.Location = new Point(12, 33);
-            searchTextBox.Name = "searchTextBox";
-            searchTextBox.Size = new Size(360, 29);
-            searchTextBox.TabIndex = 12;
+            displayNameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            displayNameTextBox.Font = new Font("Yu Gothic UI", 12F);
+            displayNameTextBox.Location = new Point(12, 33);
+            displayNameTextBox.Name = "displayNameTextBox";
+            displayNameTextBox.Size = new Size(360, 29);
+            displayNameTextBox.TabIndex = 12;
             // 
             // saveButton
             // 
@@ -71,7 +71,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(384, 111);
             Controls.Add(saveButton);
-            Controls.Add(searchTextBox);
+            Controls.Add(displayNameTextBox);
             Controls.Add(introductionLabel);
             MaximumSize = new Size(400, 150);
             MinimumSize = new Size(400, 150);
@@ -84,7 +84,7 @@
         #endregion
 
         private Label introductionLabel;
-        private TextBox searchTextBox;
+        private TextBox displayNameTextBox;
         private Button saveButton;
     }
 }

@@ -182,9 +182,15 @@ public partial class MainWindow : Form
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void editAvatarDisplayNameMenuItem_Click(object sender, EventArgs e)
+    private async void editAvatarDisplayNameMenuItem_Click(object sender, EventArgs e)
     {
-
+        var currentAvatarDisplayName = await _avatarService.GetDisplayNameByAvatarIdAsync(avatarGrid.Rows[avatarGrid.CurrentCell.RowIndex].Cells[2].Value.ToString());        
+        var form = new DisplayNameEditForm(currentAvatarDisplayName ?? null);
+        form.StartPosition = FormStartPosition.CenterParent;
+        form.ShowDialog();
+        currentFolderIndex = 0;
+        folderGrid.Rows.Clear();
+        await GenerateFolderGridAsync();
     }
     #endregion
 
