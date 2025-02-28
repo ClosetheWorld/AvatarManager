@@ -59,11 +59,12 @@
             // 
             processingAvatarName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             processingAvatarName.AutoSize = true;
-            processingAvatarName.Font = new Font("Yu Gothic UI", 12F);
-            processingAvatarName.Location = new Point(87, 50);
+            processingAvatarName.Font = new Font("Yu Gothic UI", 9F);
+            processingAvatarName.Location = new Point(115, 54);
             processingAvatarName.Name = "processingAvatarName";
-            processingAvatarName.Size = new Size(0, 21);
+            processingAvatarName.Size = new Size(98, 15);
             processingAvatarName.TabIndex = 2;
+            processingAvatarName.Text = "processingAvatar";
             processingAvatarName.UseWaitCursor = true;
             // 
             // LoadingForm
