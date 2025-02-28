@@ -60,7 +60,7 @@ internal static class Program
             Directory.CreateDirectory("Data/CachedImages");
         }
 
-        if(!Directory.Exists("Data/Backups"))
+        if (!Directory.Exists("Data/Backups"))
         {
             Directory.CreateDirectory("Data/Backups");
         }

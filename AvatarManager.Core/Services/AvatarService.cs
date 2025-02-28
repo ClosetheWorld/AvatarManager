@@ -54,7 +54,7 @@ public class AvatarService : IAvatarService
         if (folder != null)
         {
             var response = new List<OwnedAvatar>();
-            foreach(var a in folder.ContainAvatarIds)
+            foreach (var a in folder.ContainAvatarIds)
             {
                 response.Add(_dbContext.OwnedAvatars.FirstOrDefault(x => x.Id == a));
             }
@@ -62,7 +62,7 @@ public class AvatarService : IAvatarService
         return null;
     }
 
-    public async Task UpdateCachedAvatarAsync(OwnedAvatar avatar,  string newImagePath)
+    public async Task UpdateCachedAvatarAsync(OwnedAvatar avatar, string newImagePath)
     {
         var current = await _dbContext.OwnedAvatars.FirstOrDefaultAsync(x => x.Id == avatar.Id);
         if (current != null)
