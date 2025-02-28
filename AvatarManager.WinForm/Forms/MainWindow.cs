@@ -2,7 +2,6 @@ using AvatarManager.Core.Helper;
 using AvatarManager.Core.Infrastructures.Database;
 using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
 using AvatarManager.Core.Services.interfaces;
-using AvatarManager.WinForm.Forms;
 using AvatarManager.WinForm.Properties;
 using VRChat.API.Model;
 
@@ -40,6 +39,7 @@ public partial class MainWindow : Form
         if (string.IsNullOrEmpty(Settings.Default.authToken))
         {
             var auth = new AuthForm(_vrcApi);
+            auth.StartPosition = FormStartPosition.CenterParent;
             auth.ShowDialog();
             _user = _vrcApi.GetCurrentUser();
         }
@@ -104,6 +104,7 @@ public partial class MainWindow : Form
     private async void settingButton_Click(object sender, EventArgs e)
     {
         var form = new SettingForm(_avatarService, _folderService, null);
+        form.StartPosition = FormStartPosition.CenterParent;
         form.ShowDialog();
 
         // update folder grid
@@ -158,6 +159,7 @@ public partial class MainWindow : Form
     private async void editMenuItem_Click(object sender, EventArgs e)
     {
         var form = new SettingForm(_avatarService, _folderService, folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
+        form.StartPosition = FormStartPosition.CenterParent;
         form.ShowDialog();
         currentFolderIndex = 0;
         folderGrid.Rows.Clear();
@@ -297,6 +299,7 @@ public partial class MainWindow : Form
         Settings.Default.Reset();
         MessageBox.Show(msg, "îFèÿÉGÉâÅ[", MessageBoxButtons.OK, MessageBoxIcon.Error);
         var auth = new AuthForm(_vrcApi);
+        auth.StartPosition = FormStartPosition.CenterParent;
         auth.ShowDialog();
         _user = _vrcApi.GetCurrentUser();
     }

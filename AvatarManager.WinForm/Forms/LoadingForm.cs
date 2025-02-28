@@ -80,7 +80,7 @@ namespace AvatarManager.WinForm.Forms
                         await _imageService.DownloadAndCacheImageAsync(a.Id, a.ThumbnailImageUrl));
                 }
 
-                avatars.Remove(a);               
+                avatars.Remove(a);
             }
 
             // cache new avatars

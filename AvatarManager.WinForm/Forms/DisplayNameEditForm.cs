@@ -43,7 +43,7 @@ namespace AvatarManager.WinForm.Forms
         /// <param name="e"></param>
         private void displayNameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 this.saveButton_Click(sender, e);
             }
