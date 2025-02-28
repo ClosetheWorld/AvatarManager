@@ -40,7 +40,8 @@ namespace AvatarManager.Core.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(null);
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
