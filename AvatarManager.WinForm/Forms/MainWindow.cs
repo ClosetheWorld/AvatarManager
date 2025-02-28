@@ -70,6 +70,7 @@ public partial class MainWindow : Form
     {
         // avatar キャッシュ処理
         var load = new LoadingForm(_user, _vrcApi, _avatarService, _imageService);
+        load.StartPosition = FormStartPosition.CenterParent;
         load.ShowDialog();
 
         // folderGridView 生成
@@ -164,7 +165,7 @@ public partial class MainWindow : Form
     }
 
     /// <summary>
-    /// フォルダグリッドで右クリックメニューが開かれるときの処理
+    /// folderGridで右クリックメニューが開かれるときの処理
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -175,6 +176,26 @@ public partial class MainWindow : Form
         {
             e.Cancel = true;
         }
+    }
+
+    /// <summary>
+    /// avatarGridで右クリックメニューの表示名を編集がクリックされたときの処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void editAvatarDisplayNameMenuItem_Click(object sender, EventArgs e)
+    {
+        var source = avatarRightClickMenu.SourceControl as DataGridView;
+        var clickedRow = source.HitTest(source.PointToClient(Cursor.Position).X, source.PointToClient(Cursor.Position).Y).RowIndex;
+        var clickedAvatarId = avatarGrid.Rows[clickedRow].Cells[2].Value.ToString();
+        var currentAvatarDisplayName =
+            await _avatarService.GetDisplayNameByAvatarIdAsync(clickedAvatarId);
+        var form = new DisplayNameEditForm(currentAvatarDisplayName ?? null, clickedAvatarId, _avatarService);
+        form.StartPosition = FormStartPosition.CenterParent;
+        form.ShowDialog();
+        currentFolderIndex = 0;
+        folderGrid.Rows.Clear();
+        await GenerateFolderGridAsync();
     }
     #endregion
 
@@ -230,9 +251,10 @@ public partial class MainWindow : Form
             var avatars = await _avatarService.GetUnCategorizedAvatarsAsync();
             foreach (var a in avatars)
             {
-                var i = avatarGrid.Rows.Add(new Bitmap(a.ImagePath), a.Name, a.Id);
+                var i = avatarGrid.Rows.Add(new Bitmap(a.ImagePath), a.DisplayName != null ? $"{a.DisplayName} ({a.Name})" : a.Name, a.Id);
                 avatarGrid.Rows[i].Height = 70;
                 avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
+                avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
             }
         }
         else
@@ -240,9 +262,10 @@ public partial class MainWindow : Form
             var allAvatars = await _avatarService.GetCachedAvatarsAsync();
             foreach (var a in folder.ContainAvatarIds)
             {
-                var i = avatarGrid.Rows.Add(new Bitmap(allAvatars.Single(x => x.Id == a).ImagePath), allAvatars.Single(x => x.Id == a).Name, a);
+                var i = avatarGrid.Rows.Add(new Bitmap(allAvatars.Single(x => x.Id == a).ImagePath), allAvatars.Single(x => x.Id == a).DisplayName != null ? $"{allAvatars.Single(x => x.Id == a).DisplayName} ({allAvatars.Single(x => x.Id == a).Name})" : allAvatars.Single(x => x.Id == a).Name, a);
                 avatarGrid.Rows[i].Height = 70;
                 avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
+                avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
             }
         }
     }
@@ -260,7 +283,7 @@ public partial class MainWindow : Form
         cachedAvatars = await _avatarService.GetUnCategorizedAvatarsAsync();
         foreach (var c in cachedAvatars)
         {
-            var i = avatarGrid.Rows.Add(new Bitmap(c.ImagePath), c.Name, c.Id);
+            var i = avatarGrid.Rows.Add(new Bitmap(c.ImagePath), c.DisplayName != null ? $"{c.DisplayName} ({c.Name})" : c.Name, c.Id);
             avatarGrid.Rows[i].Height = 70;
             avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
         }

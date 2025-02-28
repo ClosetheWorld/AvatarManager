@@ -11,4 +11,6 @@ public interface IAvatarService
     Task<List<OwnedAvatar>> GetAvatarsByFolderIdAsync(string folderId);
     Task UpdateCachedAvatarAsync(OwnedAvatar avatar, string newImagePath);
     Task DeleteCachedAvatarAsync(string id);
+    Task<string?> GetDisplayNameByAvatarIdAsync(string id);
+    Task UpdateDisplayNameByAvatarIdAsync(string id, string displayName);
 }

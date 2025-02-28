@@ -93,4 +93,22 @@ public class AvatarService : IAvatarService
             await _dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task<string?> GetDisplayNameByAvatarIdAsync(string id)
+    {
+        var avatar = await _dbContext.OwnedAvatars.FirstOrDefaultAsync(x => x.Id == id);
+
+        return avatar.DisplayName;
+    }
+
+    public async Task UpdateDisplayNameByAvatarIdAsync(string id, string displayName)
+    {
+        var avatar = await _dbContext.OwnedAvatars.FirstOrDefaultAsync(x => x.Id == id);
+        if (avatar != null)
+        {
+            avatar.DisplayName = displayName;
+            _dbContext.OwnedAvatars.Update(avatar);
+            await _dbContext.SaveChangesAsync();
+        }
+    }
 }
