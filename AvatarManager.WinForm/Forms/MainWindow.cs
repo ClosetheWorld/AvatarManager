@@ -6,7 +6,7 @@ using AvatarManager.WinForm.Forms;
 using AvatarManager.WinForm.Properties;
 using VRChat.API.Model;
 
-namespace AvatarManager.Winform;
+namespace AvatarManager.WinForm.Forms;
 
 public partial class MainWindow : Form
 {

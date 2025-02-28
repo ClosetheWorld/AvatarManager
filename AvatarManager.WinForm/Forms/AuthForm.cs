@@ -3,7 +3,7 @@ using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
 using AvatarManager.WinForm.Properties;
 using System.Diagnostics;
 
-namespace AvatarManager.Winform;
+namespace AvatarManager.WinForm.Forms;
 
 public partial class AuthForm : Form
 {
