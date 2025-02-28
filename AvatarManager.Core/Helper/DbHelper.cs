@@ -6,4 +6,9 @@ public static class DbHelper
     {
         return "Data Source=" + Path.Combine(Directory.GetCurrentDirectory(), "Data\\AvatarManager.db");
     }
+
+    public static string GetDatabasePath()
+    {
+        return Path.Combine(Directory.GetCurrentDirectory(), "Data\\AvatarManager.db");
+    }
 }

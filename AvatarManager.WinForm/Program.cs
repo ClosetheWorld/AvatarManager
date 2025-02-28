@@ -27,6 +27,7 @@ internal static class Program
         ServiceCollection services = new ServiceCollection();
         ConfigureServices(services);
         ServiceProvider serviceProvider = services.BuildServiceProvider();
+        BackupDatabase();
         EnsureCreateDatabase(serviceProvider.GetRequiredService<ApplicationDbContext>());
 
         MainWindow main = (MainWindow)serviceProvider.GetRequiredService<MainWindow>();
@@ -56,6 +57,11 @@ internal static class Program
         if (!Directory.Exists("Data/CachedImages"))
         {
             Directory.CreateDirectory("Data/CachedImages");
+        }
+
+        if(!Directory.Exists("Data/Backups"))
+        {
+            Directory.CreateDirectory("Data/Backups");
         }
     }
 
@@ -91,6 +97,16 @@ internal static class Program
 
             // マイグレーションを実行
             migrator.Migrate();
+        }
+    }
+
+    private static void BackupDatabase()
+    {
+        if (File.Exists(DbHelper.GetDatabasePath()))
+        {
+            var backupPath = $"Data/Backups/AvatarManagerBackup-{DateTime.Now:yyyyMMddHHmmss}.db";
+            var origpath = DbHelper.GetDatabasePath();
+            File.Copy(DbHelper.GetDatabasePath(), backupPath);
         }
     }
 }
