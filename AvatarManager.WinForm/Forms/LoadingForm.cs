@@ -60,6 +60,7 @@ namespace AvatarManager.WinForm.Forms
             var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
             foreach (var c in cachedAvatars)
             {
+                processingAvatarName.Text = c.Name;
                 var a = avatars.FirstOrDefault(x => x.Id == c.Id);
                 if (a == null)
                 {
@@ -85,6 +86,7 @@ namespace AvatarManager.WinForm.Forms
             // cache new avatars
             foreach (var avatar in avatars)
             {
+                processingAvatarName.Text = avatar.Name;
                 var imagePath = await _imageService.DownloadAndCacheImageAsync(avatar.Id, avatar.ThumbnailImageUrl);
 
                 await _avatarService.CacheAvatarAsync(new OwnedAvatar
