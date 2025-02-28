@@ -1,4 +1,4 @@
-﻿namespace AvatarManager.Winform
+﻿namespace AvatarManager.WinForm.Forms
 {
     partial class MainWindow
     {

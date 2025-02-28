@@ -4,6 +4,7 @@ using AvatarManager.Core.Infrastructures.ExternalServices;
 using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
 using AvatarManager.Core.Services;
 using AvatarManager.Core.Services.interfaces;
+using AvatarManager.WinForm.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;

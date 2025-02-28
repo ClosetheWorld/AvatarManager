@@ -30,6 +30,7 @@
         {
             loadingLabel = new Label();
             progressBar1 = new ProgressBar();
+            processingAvatarName = new Label();
             SuspendLayout();
             // 
             // loadingLabel
@@ -37,7 +38,7 @@
             loadingLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             loadingLabel.AutoSize = true;
             loadingLabel.Font = new Font("Yu Gothic UI", 12F);
-            loadingLabel.Location = new Point(87, 13);
+            loadingLabel.Location = new Point(87, 19);
             loadingLabel.Name = "loadingLabel";
             loadingLabel.Size = new Size(155, 21);
             loadingLabel.TabIndex = 0;
@@ -47,24 +48,36 @@
             // progressBar1
             // 
             progressBar1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            progressBar1.Location = new Point(12, 51);
+            progressBar1.Location = new Point(12, 86);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(310, 23);
             progressBar1.Style = ProgressBarStyle.Marquee;
             progressBar1.TabIndex = 1;
             progressBar1.UseWaitCursor = true;
             // 
+            // processingAvatarName
+            // 
+            processingAvatarName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            processingAvatarName.AutoSize = true;
+            processingAvatarName.Font = new Font("Yu Gothic UI", 12F);
+            processingAvatarName.Location = new Point(87, 50);
+            processingAvatarName.Name = "processingAvatarName";
+            processingAvatarName.Size = new Size(0, 21);
+            processingAvatarName.TabIndex = 2;
+            processingAvatarName.UseWaitCursor = true;
+            // 
             // LoadingForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(334, 86);
+            ClientSize = new Size(334, 121);
+            Controls.Add(processingAvatarName);
             Controls.Add(progressBar1);
             Controls.Add(loadingLabel);
             MaximizeBox = false;
-            MaximumSize = new Size(350, 125);
+            MaximumSize = new Size(350, 160);
             MinimizeBox = false;
-            MinimumSize = new Size(350, 125);
+            MinimumSize = new Size(350, 160);
             Name = "LoadingForm";
             UseWaitCursor = true;
             FormClosing += LoadingForm_FormClosing;
@@ -77,5 +90,6 @@
 
         private Label loadingLabel;
         private ProgressBar progressBar1;
+        private Label processingAvatarName;
     }
 }
