@@ -47,6 +47,7 @@
             authTokenInput.PlaceholderText = "authcookie_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
             authTokenInput.Size = new Size(360, 23);
             authTokenInput.TabIndex = 0;
+            authTokenInput.KeyDown += authTokenInput_KeyDown;
             // 
             // authButton
             // 
