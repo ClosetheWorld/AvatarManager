@@ -285,6 +285,7 @@ public partial class MainWindow : Form
             var i = avatarGrid.Rows.Add(new Bitmap(c.ImagePath), c.DisplayName != null ? $"{c.DisplayName} ({c.Name})" : c.Name, c.Id);
             avatarGrid.Rows[i].Height = 70;
             avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
+            avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
         }
     }
 
