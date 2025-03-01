@@ -1,5 +1,15 @@
 # AvatarManager
 
+![](https://img.shields.io/github/v/release/ClosetheWorld/AvatarManager?sort=date
+)
+![](https://img.shields.io/github/release-date/ClosetheWorld/AvatarManager
+)
+
+![](https://img.shields.io/github/last-commit/ClosetheWorld/AvatarManager
+)
+![](https://img.shields.io/github/commit-activity/m/ClosetheWorld/AvatarManager
+)
+
 ## About
 
 XSOverlayなどのオーバーレイアプリからVRChatで使用しているアバターを切り替えることを多少便利にするアプリケーションです。
