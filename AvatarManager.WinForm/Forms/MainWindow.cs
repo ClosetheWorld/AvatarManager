@@ -10,7 +10,6 @@ namespace AvatarManager.WinForm.Forms;
 public partial class MainWindow : Form
 {
     private IVRChatApiClient _vrcApi;
-    private ApplicationDbContext _dbContext;
     private CurrentUser _user;
     private readonly IAvatarService _avatarService;
     private readonly IImageService _imageService;
@@ -32,8 +31,6 @@ public partial class MainWindow : Form
         _avatarService = avatarService;
         _imageService = imageService;
         _folderService = folderService;
-        _dbContext = dbContext;
-        _dbContext.Database.EnsureCreated();
 
         Settings.Default.Upgrade();
         if (string.IsNullOrEmpty(Settings.Default.authToken))
