@@ -12,6 +12,7 @@ public class VRChatApiClient : IVRChatApiClient
     private AuthenticationApi _authenticationApi;
     private AvatarsApi _avatarsApi;
     private static HttpClient _httpClient = new();
+    private int _exceptionCount = 0;
 
     public void Init(string authToken)
     {
@@ -60,22 +61,22 @@ public class VRChatApiClient : IVRChatApiClient
     {
         var response = await _authenticationApi.GetCurrentUserWithHttpInfoAsync();
         return response.Data;
-    }
+    }    
 
-    public List<Avatar> GetAvatars(string userId)
+    public async Task<List<Avatar>> GetAvatarsAsync(string userId)
     {
         List<Avatar> avatars = new();
 
         // get 0-100 avatars
         try
-        {
+        {            
             avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
         }
         catch (Exception e)
         {
             do
             {
-                HandleExceptionWhileLoadingAvatar(ref avatars);
+                await HandleExceptionWhileLoadingAvatarAsync(avatars.Count);
             } while (avatars.Count == 0);
         }
 
@@ -86,24 +87,19 @@ public class VRChatApiClient : IVRChatApiClient
             {
                 try
                 {
-                    avatars.AddRange(_avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
+                    avatars.AddRange(await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
                 }
                 catch (Exception e)
                 {
                     do
                     {
-                        HandleExceptionWhileLoadingAvatar(ref avatars, i);
+                        avatars.AddRange(await HandleExceptionWhileLoadingAvatarAsync(avatars.Count, i));
                     } while (avatars.Count % 100 == 0);
                 }
             }
         }
 
-        return avatars;
-    }
-
-    public async Task<List<Avatar>> GetAvatarsAsync(string userId)
-    {
-        var avatars = await _avatarsApi.SearchAvatarsAsync(userId: userId);
+        _exceptionCount = 0;
         return avatars;
     }
 
@@ -123,22 +119,23 @@ public class VRChatApiClient : IVRChatApiClient
         _avatarsApi = new AvatarsApi(_apiClient, _apiClient, _configuration);
     }
 
-    private void HandleExceptionWhileLoadingAvatar(ref List<Avatar> avatars, int offset = 0)
+    private async Task<List<Avatar>> HandleExceptionWhileLoadingAvatarAsync(int currentCount, int offset = 0)
     {
-        var exceptionCount = 1;
-        Task.Delay(1000 * exceptionCount).Wait();
-        if (avatars.Count == 0)
+        List<Avatar> avatars = new();
+        if (currentCount == 0)
         {
             try
-            {
-                avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+            {                
+                await Task.Delay(1000 * _exceptionCount * _exceptionCount);
+                avatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+                return avatars;
             }
             catch (Exception e)
             {
-                exceptionCount++;
-                if (exceptionCount > 3)
+                _exceptionCount++;
+                if (_exceptionCount > 5)
                 {
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -146,16 +143,20 @@ public class VRChatApiClient : IVRChatApiClient
         {
             try
             {
-                avatars = _avatarsApi.SearchAvatars(user: "me", n: offset * 100, releaseStatus: ReleaseStatus.All);
+                await Task.Delay(1000 * _exceptionCount * _exceptionCount);
+                avatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: offset * 100, releaseStatus: ReleaseStatus.All);
+                return avatars;
             }
             catch (Exception e)
             {
-                exceptionCount++;
-                if (exceptionCount > 3)
+                _exceptionCount++;
+                if (_exceptionCount > 5)
                 {
-                    throw e;
+                    throw;
                 }
             }
         }
+
+        return avatars;
     }
 }
