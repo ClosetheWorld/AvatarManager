@@ -56,7 +56,7 @@ namespace AvatarManager.WinForm.Forms
         public async Task StartLoading()
         {
             processingAvatarName.Text = "Loading...";
-            List<Avatar> avatars = new ();
+            List<Avatar> avatars = new();
             try
             {
                 avatars = await _vrcApi.GetAvatarsAsync(_user.Id);

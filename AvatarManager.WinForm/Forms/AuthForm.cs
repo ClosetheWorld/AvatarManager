@@ -83,7 +83,7 @@ public partial class AuthForm : Form
 
     private void authTokenInput_KeyDown(object sender, KeyEventArgs e)
     {
-        if(e.KeyCode == Keys.Enter)
+        if (e.KeyCode == Keys.Enter)
         {
             this.authButton_Click(sender, e);
         }
