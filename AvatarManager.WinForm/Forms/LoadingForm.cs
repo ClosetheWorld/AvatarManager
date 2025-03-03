@@ -54,6 +54,7 @@ namespace AvatarManager.WinForm.Forms
         /// <returns></returns>
         public async Task StartLoading()
         {
+            processingAvatarName.Text = "Loading...";
             var avatars = _vrcApi.GetAvatars(_user.Id);
 
             // distinct avatars from api

@@ -64,14 +64,40 @@ public class VRChatApiClient : IVRChatApiClient
 
     public List<Avatar> GetAvatars(string userId)
     {
-        var avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+        List<Avatar> avatars = new();
+
+        // get 0-100 avatars
+        try
+        {
+            avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+        }
+        catch (Exception e)
+        {
+            do
+            {
+                HandleExceptionWhileLoadingAvatar(ref avatars);
+            } while (avatars.Count == 0);
+        }
+
+        // get 100+ avatars
         if (avatars.Count == 100)
         {
             for (int i = 1; avatars.Count % 100 == 0; i++)
             {
-                avatars.AddRange(_avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
+                try
+                {
+                    avatars.AddRange(_avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
+                }
+                catch (Exception e)
+                {
+                    do
+                    {
+                        HandleExceptionWhileLoadingAvatar(ref avatars, i);
+                    } while (avatars.Count % 100 == 0);
+                }
             }
         }
+
         return avatars;
     }
 
@@ -95,5 +121,41 @@ public class VRChatApiClient : IVRChatApiClient
     private void InitApiClients()
     {
         _avatarsApi = new AvatarsApi(_apiClient, _apiClient, _configuration);
+    }
+
+    private void HandleExceptionWhileLoadingAvatar(ref List<Avatar> avatars, int offset = 0)
+    {
+        var exceptionCount = 1;
+        Task.Delay(1000 * exceptionCount).Wait();
+        if (avatars.Count == 0)
+        {
+            try
+            {
+                avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+            }
+            catch (Exception e)
+            {
+                exceptionCount++;
+                if (exceptionCount > 3)
+                {
+                    throw e;
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                avatars = _avatarsApi.SearchAvatars(user: "me", n: offset * 100, releaseStatus: ReleaseStatus.All);
+            }
+            catch (Exception e)
+            {
+                exceptionCount++;
+                if (exceptionCount > 3)
+                {
+                    throw e;
+                }
+            }
+        }
     }
 }
