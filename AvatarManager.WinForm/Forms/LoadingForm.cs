@@ -1,6 +1,7 @@
 ﻿using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
 using AvatarManager.Core.Models;
 using AvatarManager.Core.Services.interfaces;
+using System.Diagnostics;
 using VRChat.API.Model;
 
 namespace AvatarManager.WinForm.Forms
@@ -54,7 +55,23 @@ namespace AvatarManager.WinForm.Forms
         /// <returns></returns>
         public async Task StartLoading()
         {
-            var avatars = _vrcApi.GetAvatars(_user.Id);
+            processingAvatarName.Text = "Loading...";
+            List<Avatar> avatars = new();
+            try
+            {
+                avatars = await _vrcApi.GetAvatarsAsync(_user.Id);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"アバター情報のロード中にエラーが発生しました。\nよろしければ開発者にこの画面のスクリーンショットをお送りください。\n" +
+                    $"===\n" +
+                    $"{e.Message}\n" +
+                    $"===\n" +
+                    $"{e.StackTrace}\n" +
+                    $"===\n" +
+                    $"{e.InnerException}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Process.GetCurrentProcess().Kill();
+            }
 
             // distinct avatars from api
             var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
