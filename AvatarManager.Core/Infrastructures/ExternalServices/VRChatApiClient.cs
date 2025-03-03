@@ -12,13 +12,14 @@ public class VRChatApiClient : IVRChatApiClient
     private AuthenticationApi _authenticationApi;
     private AvatarsApi _avatarsApi;
     private static HttpClient _httpClient = new();
+    private int _exceptionCount = 0;
 
     public void Init(string authToken)
     {
         _configuration = new Configuration
         {
             BasePath = "https://api.vrchat.cloud/api/1",
-            UserAgent = "AvatarManager/1.0.6",
+            UserAgent = "AvatarManager/1.0.7",
             DefaultHeaders =
             {
                 ["Cookie"] = $"apiKey=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26; auth={authToken}"
@@ -27,7 +28,7 @@ public class VRChatApiClient : IVRChatApiClient
 
         _authenticationApi = new AuthenticationApi(_apiClient, _apiClient, _configuration);
         _httpClient.DefaultRequestHeaders.Add("Cookie", $"auth={authToken}");
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", "AvatarManager/1.0.6");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "AvatarManager/1.0.7");
     }
 
     public bool Auth()
@@ -60,24 +61,45 @@ public class VRChatApiClient : IVRChatApiClient
     {
         var response = await _authenticationApi.GetCurrentUserWithHttpInfoAsync();
         return response.Data;
-    }
+    }    
 
-    public List<Avatar> GetAvatars(string userId)
+    public async Task<List<Avatar>> GetAvatarsAsync(string userId)
     {
-        var avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+        List<Avatar> avatars = new();
+
+        // get 0-100 avatars
+        try
+        {            
+            avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+        }
+        catch (Exception e)
+        {
+            do
+            {
+                await HandleExceptionWhileLoadingAvatarAsync(avatars.Count);
+            } while (avatars.Count == 0);
+        }
+
+        // get 100+ avatars
         if (avatars.Count == 100)
         {
             for (int i = 1; avatars.Count % 100 == 0; i++)
             {
-                avatars.AddRange(_avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
+                try
+                {
+                    avatars.AddRange(await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
+                }
+                catch (Exception e)
+                {
+                    do
+                    {
+                        avatars.AddRange(await HandleExceptionWhileLoadingAvatarAsync(avatars.Count, i));
+                    } while (avatars.Count % 100 == 0);
+                }
             }
         }
-        return avatars;
-    }
 
-    public async Task<List<Avatar>> GetAvatarsAsync(string userId)
-    {
-        var avatars = await _avatarsApi.SearchAvatarsAsync(userId: userId);
+        _exceptionCount = 0;
         return avatars;
     }
 
@@ -95,5 +117,46 @@ public class VRChatApiClient : IVRChatApiClient
     private void InitApiClients()
     {
         _avatarsApi = new AvatarsApi(_apiClient, _apiClient, _configuration);
+    }
+
+    private async Task<List<Avatar>> HandleExceptionWhileLoadingAvatarAsync(int currentCount, int offset = 0)
+    {
+        List<Avatar> avatars = new();
+        if (currentCount == 0)
+        {
+            try
+            {                
+                await Task.Delay(1000 * _exceptionCount * _exceptionCount);
+                avatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
+                return avatars;
+            }
+            catch (Exception e)
+            {
+                _exceptionCount++;
+                if (_exceptionCount > 5)
+                {
+                    throw;
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                await Task.Delay(1000 * _exceptionCount * _exceptionCount);
+                avatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: offset * 100, releaseStatus: ReleaseStatus.All);
+                return avatars;
+            }
+            catch (Exception e)
+            {
+                _exceptionCount++;
+                if (_exceptionCount > 5)
+                {
+                    throw;
+                }
+            }
+        }
+
+        return avatars;
     }
 }

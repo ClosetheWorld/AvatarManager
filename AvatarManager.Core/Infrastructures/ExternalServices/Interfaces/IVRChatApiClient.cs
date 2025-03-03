@@ -9,7 +9,6 @@ public interface IVRChatApiClient
     Task<bool> AuthAsync();
     CurrentUser GetCurrentUser();
     Task<CurrentUser> GetCurrentUserAsync();
-    List<Avatar> GetAvatars(string userId);
     Task<List<Avatar>> GetAvatarsAsync(string userId);
     Task<HttpResponseMessage> DownloadImageAsync(string url);
     Task SetCurrentAvatarAsync(string id);
