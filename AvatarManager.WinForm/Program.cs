@@ -40,6 +40,7 @@ internal static class Program
         services.AddSingleton<MainWindow>();
         services.AddSingleton<DisplayNameEditForm>();
         services.AddSingleton<SettingForm>();
+        services.AddSingleton<LoadingForm>();
         services.AddScoped<IVRChatApiClient, VRChatApiClient>();
         services.AddScoped<IAvatarService, AvatarService>();
         services.AddScoped<IImageService, ImageService>();

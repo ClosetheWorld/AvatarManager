@@ -13,6 +13,7 @@ public partial class MainWindow : Form
 {
     private IVRChatApiClient _vrcApi;
     private CurrentUser _user;
+    private readonly LoadingForm _loadingForm;
     private readonly DisplayNameEditForm _displayNameEditForm;
     private readonly SettingForm _settingForm;
     private readonly IAvatarService _avatarService;
@@ -33,12 +34,13 @@ public partial class MainWindow : Form
     /// <param name="folderService"></param>
     public MainWindow(IVRChatApiClient vrcApiClient, ApplicationDbContext dbContext,
         IAvatarService avatarService, IImageService imageService, IFolderService folderService,
-        DisplayNameEditForm displayNameEditForm, SettingForm settingForm)
+        DisplayNameEditForm displayNameEditForm, SettingForm settingForm, LoadingForm loadingForm)
     {
         _vrcApi = vrcApiClient;
         _avatarService = avatarService;
         _imageService = imageService;
         _folderService = folderService;
+        _loadingForm = loadingForm;
         _displayNameEditForm = displayNameEditForm;
         _settingForm = settingForm;
 
@@ -76,9 +78,9 @@ public partial class MainWindow : Form
     private async void MainWindow_Shown(object sender, EventArgs e)
     {
         // avatar ÉLÉÉÉbÉVÉÖèàóù
-        var load = new LoadingForm(_user, _vrcApi, _avatarService, _imageService);
-        load.StartPosition = FormStartPosition.CenterParent;
-        load.ShowDialog();
+        _loadingForm.SetCurrentUser(_user);
+        _loadingForm.StartPosition = FormStartPosition.CenterParent;
+        _loadingForm.ShowDialog();
 
         // avatarThumbnailê∂ê¨
         await GenerateAvatarThumbnailBitMapListAsync();
