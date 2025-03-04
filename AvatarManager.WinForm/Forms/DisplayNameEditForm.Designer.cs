@@ -79,6 +79,7 @@
             MinimumSize = new Size(400, 150);
             Name = "DisplayNameEditForm";
             Text = "表示名を変更";
+            Shown += DisplayNameEditForm_Shown;
             ResumeLayout(false);
             PerformLayout();
         }
