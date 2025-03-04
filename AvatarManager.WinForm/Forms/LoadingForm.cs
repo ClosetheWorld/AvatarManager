@@ -13,9 +13,8 @@ namespace AvatarManager.WinForm.Forms
         private IAvatarService _avatarService;
         private IImageService _imageService;
 
-        public LoadingForm(CurrentUser user, IVRChatApiClient vrchatApiClient, IAvatarService avatarService, IImageService imageService)
+        public LoadingForm(IVRChatApiClient vrchatApiClient, IAvatarService avatarService, IImageService imageService)
         {
-            _user = user;
             _vrcApi = vrchatApiClient;
             _avatarService = avatarService;
             _imageService = imageService;
@@ -50,10 +49,19 @@ namespace AvatarManager.WinForm.Forms
 
         #region Methods
         /// <summary>
+        /// _userをセットする
+        /// </summary>
+        /// <param name="user"></param>
+        public void SetCurrentUser(CurrentUser user)
+        {
+            _user = user;
+        }
+
+        /// <summary>
         /// ロード処理を開始する
         /// </summary>
         /// <returns></returns>
-        public async Task StartLoading()
+        private async Task StartLoading()
         {
             processingAvatarName.Text = "Loading...";
             List<Avatar> avatars = new();
@@ -114,9 +122,7 @@ namespace AvatarManager.WinForm.Forms
                     ImagePath = imagePath
                 });
             }
-
-            this.Close();
-            this.Dispose();
+            Visible = false;
         }
         #endregion
     }
