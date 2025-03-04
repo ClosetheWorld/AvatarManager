@@ -13,6 +13,7 @@ public partial class MainWindow : Form
 {
     private IVRChatApiClient _vrcApi;
     private CurrentUser _user;
+    private readonly AuthForm _authForm;
     private readonly LoadingForm _loadingForm;
     private readonly DisplayNameEditForm _displayNameEditForm;
     private readonly SettingForm _settingForm;
@@ -34,12 +35,13 @@ public partial class MainWindow : Form
     /// <param name="folderService"></param>
     public MainWindow(IVRChatApiClient vrcApiClient, ApplicationDbContext dbContext,
         IAvatarService avatarService, IImageService imageService, IFolderService folderService,
-        DisplayNameEditForm displayNameEditForm, SettingForm settingForm, LoadingForm loadingForm)
+        DisplayNameEditForm displayNameEditForm, SettingForm settingForm, LoadingForm loadingForm, AuthForm authForm)
     {
         _vrcApi = vrcApiClient;
         _avatarService = avatarService;
         _imageService = imageService;
         _folderService = folderService;
+        _authForm = authForm;
         _loadingForm = loadingForm;
         _displayNameEditForm = displayNameEditForm;
         _settingForm = settingForm;
@@ -47,9 +49,8 @@ public partial class MainWindow : Form
         Settings.Default.Upgrade();
         if (string.IsNullOrEmpty(Settings.Default.authToken))
         {
-            var auth = new AuthForm(_vrcApi);
-            auth.StartPosition = FormStartPosition.CenterParent;
-            auth.ShowDialog();
+            _authForm.StartPosition = FormStartPosition.CenterParent;
+            _authForm.ShowDialog();
             _user = _vrcApi.GetCurrentUser();
         }
         else
@@ -325,9 +326,8 @@ public partial class MainWindow : Form
     {
         Settings.Default.Reset();
         MessageBox.Show(msg, "îFèÿÉGÉâÅ[", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        var auth = new AuthForm(_vrcApi);
-        auth.StartPosition = FormStartPosition.CenterParent;
-        auth.ShowDialog();
+        _authForm.StartPosition = FormStartPosition.CenterParent;
+        _authForm.ShowDialog();
         _user = _vrcApi.GetCurrentUser();
     }
 

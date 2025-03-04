@@ -45,8 +45,7 @@ public partial class AuthForm : Form
             Settings.Default.authToken = TokenHelper.EncodeToken(authTokenInput.Text);
             Settings.Default.Save();
         }
-        this.Close();
-        this.Dispose();
+        Visible = false;
     }
 
     /// <summary>
@@ -85,7 +84,7 @@ public partial class AuthForm : Form
     {
         if (e.KeyCode == Keys.Enter)
         {
-            this.authButton_Click(sender, e);
+            authButton_Click(sender, e);
         }
     }
     #endregion
