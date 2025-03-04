@@ -13,7 +13,8 @@ public partial class MainWindow : Form
 {
     private IVRChatApiClient _vrcApi;
     private CurrentUser _user;
-    private static DisplayNameEditForm _displayNameEditForm;
+    private readonly DisplayNameEditForm _displayNameEditForm;
+    private readonly SettingForm _settingForm;
     private readonly IAvatarService _avatarService;
     private readonly IImageService _imageService;
     private readonly IFolderService _folderService;
@@ -32,13 +33,14 @@ public partial class MainWindow : Form
     /// <param name="folderService"></param>
     public MainWindow(IVRChatApiClient vrcApiClient, ApplicationDbContext dbContext,
         IAvatarService avatarService, IImageService imageService, IFolderService folderService,
-        DisplayNameEditForm displayNameEditForm)
+        DisplayNameEditForm displayNameEditForm, SettingForm settingForm)
     {
         _vrcApi = vrcApiClient;
         _avatarService = avatarService;
         _imageService = imageService;
         _folderService = folderService;
         _displayNameEditForm = displayNameEditForm;
+        _settingForm = settingForm;
 
         Settings.Default.Upgrade();
         if (string.IsNullOrEmpty(Settings.Default.authToken))
@@ -123,9 +125,9 @@ public partial class MainWindow : Form
     /// <param name="e"></param>
     private async void settingButton_Click(object sender, EventArgs e)
     {
-        var form = new SettingForm(_avatarService, _folderService, null);
-        form.StartPosition = FormStartPosition.CenterParent;
-        form.ShowDialog();
+        _settingForm.SetFolderId(null);
+        _settingForm.StartPosition = FormStartPosition.CenterParent;
+        _settingForm.ShowDialog();
 
         // update folder grid
         currentFolderIndex = 0;
@@ -178,9 +180,9 @@ public partial class MainWindow : Form
     /// <param name="e"></param>
     private async void editMenuItem_Click(object sender, EventArgs e)
     {
-        var form = new SettingForm(_avatarService, _folderService, folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
-        form.StartPosition = FormStartPosition.CenterParent;
-        form.ShowDialog();
+        _settingForm.SetFolderId(folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
+        _settingForm.StartPosition = FormStartPosition.CenterParent;
+        _settingForm.ShowDialog();
         currentFolderIndex = 0;
         folderGrid.Rows.Clear();
         await GenerateFolderGridAsync();

@@ -12,13 +12,13 @@ namespace AvatarManager.WinForm.Forms
         private DataTable _dataTable = new DataTable();
         private BindingSource _bindingSource = new BindingSource();
 
-        public SettingForm(IAvatarService avatarService, IFolderService folderService, string? folderId)
+        public SettingForm(IAvatarService avatarService, IFolderService folderService)
         {
             _avatarService = avatarService;
             _folderService = folderService;
-            _folderId = folderId;
 
             InitializeComponent();
+            InitDataTable();
         }
 
         #region EventHandlers
@@ -29,15 +29,18 @@ namespace AvatarManager.WinForm.Forms
         /// <param name="e"></param>
         private async void SettingForm_Shown(object sender, EventArgs e)
         {
+            // 再表示に初期化処理を行う
+            _dataTable.Clear();
+            searchTextBox.Text = "";
+            _bindingSource.DataSource = _dataTable;
+            avatarGridBindingSource.DataSource = _bindingSource;
+
             await GenerateAllAvatarGridAsync();
             if (_folderId != null)
             {
                 await SetFolderNameAsync();
                 this.Text = "フォルダ編集";
             }
-
-            _bindingSource.DataSource = _dataTable;
-            avatarGridBindingSource.DataSource = _bindingSource;
         }
 
         /// <summary>
@@ -47,12 +50,15 @@ namespace AvatarManager.WinForm.Forms
         /// <param name="e"></param>
         private async void saveButton_Click(object sender, EventArgs e)
         {
+            // Filterをクリアしないとチェックボックスが正しく取得できない？
+            _bindingSource.Filter = "";
+
             var avatars = new List<string>();
             for (var i = 0; i < avatarGrid.Rows.Count; i++)
             {
-                if (Convert.ToBoolean(avatarGrid.Rows[i].Cells[0].Value) == true)
+                if ((bool)_dataTable.Rows[i][0] == true)
                 {
-                    avatars.Add(avatarGrid.Rows[i].Cells[3].Value.ToString());
+                    avatars.Add(_dataTable.Rows[i][3].ToString());
                 }
             }
 
@@ -75,8 +81,7 @@ namespace AvatarManager.WinForm.Forms
                 });
             }
 
-            this.Close();
-            this.Dispose();
+            Visible = false;
         }
 
         /// <summary>
@@ -93,16 +98,21 @@ namespace AvatarManager.WinForm.Forms
 
         #region Methods
         /// <summary>
+        /// フォルダIDを設定する
+        /// </summary>
+        /// <param name="folderId"></param>
+        public void SetFolderId(string? folderId)
+        {
+            _folderId = folderId;
+        }
+
+        /// <summary>
         /// アバターグリッドを生成する
         /// </summary>
         /// <returns></returns>
         private async Task GenerateAllAvatarGridAsync()
         {
             var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
-            _dataTable.Columns.Add("IsSelected", typeof(bool));
-            _dataTable.Columns.Add("AvatarThumbnail", typeof(Bitmap));
-            _dataTable.Columns.Add("AvatarName", typeof(string));
-            _dataTable.Columns.Add("AvatarId", typeof(string));
 
             foreach (var c in cachedAvatars)
             {
@@ -113,6 +123,17 @@ namespace AvatarManager.WinForm.Forms
                 row["AvatarId"] = c.Id;
                 _dataTable.Rows.Add(row);
             }
+        }
+
+        /// <summary>
+        /// データテーブルを初期化する
+        /// </summary>
+        private void InitDataTable()
+        {
+            _dataTable.Columns.Add("IsSelected", typeof(bool));
+            _dataTable.Columns.Add("AvatarThumbnail", typeof(Bitmap));
+            _dataTable.Columns.Add("AvatarName", typeof(string));
+            _dataTable.Columns.Add("AvatarId", typeof(string));
         }
 
         /// <summary>
