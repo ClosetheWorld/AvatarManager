@@ -48,6 +48,11 @@ namespace AvatarManager.WinForm.Forms
             {
                 this.saveButton_Click(sender, e);
             }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                Visible = false;
+            }
         }
 
         /// <summary>
