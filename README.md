@@ -4,7 +4,10 @@
 )
 ![](https://img.shields.io/github/release-date/ClosetheWorld/AvatarManager
 )
+![](https://img.shields.io/github/license/closetheworld/avatarmanager
+)
 
+[![CodeFactor](https://www.codefactor.io/repository/github/closetheworld/avatarmanager/badge)](https://www.codefactor.io/repository/github/closetheworld/avatarmanager)
 ![](https://img.shields.io/github/last-commit/ClosetheWorld/AvatarManager
 )
 ![](https://img.shields.io/github/commit-activity/m/ClosetheWorld/AvatarManager
