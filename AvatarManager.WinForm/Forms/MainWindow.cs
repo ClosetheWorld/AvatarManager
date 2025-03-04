@@ -119,13 +119,14 @@ public partial class MainWindow : Form
     }
 
     /// <summary>
-    /// 設定ボタンが押されたときの処理
+    /// フォルダ追加ボタンが押されたときの処理
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private async void settingButton_Click(object sender, EventArgs e)
     {
         _settingForm.SetFolderId(null);
+        _settingForm.SetBitmapList(_avatarThumbnails);
         _settingForm.StartPosition = FormStartPosition.CenterParent;
         _settingForm.ShowDialog();
 
@@ -181,6 +182,7 @@ public partial class MainWindow : Form
     private async void editMenuItem_Click(object sender, EventArgs e)
     {
         _settingForm.SetFolderId(folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
+        _settingForm.SetBitmapList(_avatarThumbnails);
         _settingForm.StartPosition = FormStartPosition.CenterParent;
         _settingForm.ShowDialog();
         currentFolderIndex = 0;

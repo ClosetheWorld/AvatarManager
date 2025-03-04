@@ -11,6 +11,7 @@ namespace AvatarManager.WinForm.Forms
         private string? _folderId;
         private DataTable _dataTable = new DataTable();
         private BindingSource _bindingSource = new BindingSource();
+        private List<Tuple<Bitmap, string>> _avatarThumbnails = new List<Tuple<Bitmap, string>>();
 
         public SettingForm(IAvatarService avatarService, IFolderService folderService)
         {
@@ -40,6 +41,10 @@ namespace AvatarManager.WinForm.Forms
             {
                 await SetFolderNameAsync();
                 this.Text = "フォルダ編集";
+            }
+            else
+            {
+                folderNameTextBox.Text = "";
             }
         }
 
@@ -107,6 +112,15 @@ namespace AvatarManager.WinForm.Forms
         }
 
         /// <summary>
+        /// ビットマップリストを設定する
+        /// </summary>
+        /// <param name="list"></param>
+        public void SetBitmapList(List<Tuple<Bitmap, string>> list)
+        {
+            _avatarThumbnails = list;
+        }
+
+        /// <summary>
         /// アバターグリッドを生成する
         /// </summary>
         /// <returns></returns>
@@ -118,7 +132,7 @@ namespace AvatarManager.WinForm.Forms
             {
                 var row = _dataTable.NewRow();
                 row["IsSelected"] = string.IsNullOrEmpty(_folderId) ? false : await SetAvatarGridCheckBoxAsync(c.Id);
-                row["AvatarThumbnail"] = new Bitmap(c.ImagePath);
+                row["AvatarThumbnail"] = _avatarThumbnails.Single(x => x.Item2 == c.Id).Item1;
                 row["AvatarName"] = c.Name;
                 row["AvatarId"] = c.Id;
                 _dataTable.Rows.Add(row);
