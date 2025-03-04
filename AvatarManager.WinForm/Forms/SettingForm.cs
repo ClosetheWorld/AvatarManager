@@ -29,7 +29,7 @@ namespace AvatarManager.WinForm.Forms
         /// <param name="e"></param>
         private async void SettingForm_Shown(object sender, EventArgs e)
         {
-            // 再表示に初期化処理を行う
+            // 再表示時に初期化処理を行う
             _dataTable.Clear();
             searchTextBox.Text = "";
             _bindingSource.DataSource = _dataTable;
