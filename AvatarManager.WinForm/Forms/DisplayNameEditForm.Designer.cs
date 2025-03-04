@@ -75,7 +75,9 @@
             Controls.Add(saveButton);
             Controls.Add(displayNameTextBox);
             Controls.Add(introductionLabel);
+            MaximizeBox = false;
             MaximumSize = new Size(400, 150);
+            MinimizeBox = false;
             MinimumSize = new Size(400, 150);
             Name = "DisplayNameEditForm";
             Text = "表示名を変更";
