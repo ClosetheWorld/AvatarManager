@@ -34,7 +34,7 @@
             avatarThumbnailDataGridViewImageColumn = new DataGridViewImageColumn();
             avatarNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             avatarIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            editFormAvatarGridBindingSource = new BindingSource(components);
+            avatarGridBindingSource = new BindingSource(components);
             saveButton = new Button();
             introLabel = new Label();
             folderNameLabel = new Label();
@@ -42,7 +42,7 @@
             searchTextBox = new TextBox();
             avatarSearchLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)avatarGrid).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)editFormAvatarGridBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)avatarGridBindingSource).BeginInit();
             SuspendLayout();
             // 
             // avatarGrid
@@ -53,7 +53,7 @@
             avatarGrid.AutoGenerateColumns = false;
             avatarGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             avatarGrid.Columns.AddRange(new DataGridViewColumn[] { isSelectedDataGridViewCheckBoxColumn, avatarThumbnailDataGridViewImageColumn, avatarNameDataGridViewTextBoxColumn, avatarIdDataGridViewTextBoxColumn });
-            avatarGrid.DataSource = editFormAvatarGridBindingSource;
+            avatarGrid.DataSource = avatarGridBindingSource;
             avatarGrid.Location = new Point(12, 70);
             avatarGrid.MultiSelect = false;
             avatarGrid.Name = "avatarGrid";
@@ -100,9 +100,9 @@
             avatarIdDataGridViewTextBoxColumn.Name = "avatarIdDataGridViewTextBoxColumn";
             avatarIdDataGridViewTextBoxColumn.Visible = false;
             // 
-            // editFormAvatarGridBindingSource
+            // avatarGridBindingSource
             // 
-            editFormAvatarGridBindingSource.DataSource = typeof(Core.Models.Binding.EditFormAvatarGrid);
+            avatarGridBindingSource.DataSource = typeof(Core.Models.Binding.EditFormAvatarGrid);
             // 
             // saveButton
             // 
@@ -182,7 +182,7 @@
             Text = "フォルダ追加";
             Shown += SettingForm_Shown;
             ((System.ComponentModel.ISupportInitialize)avatarGrid).EndInit();
-            ((System.ComponentModel.ISupportInitialize)editFormAvatarGridBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)avatarGridBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -197,7 +197,7 @@
         private DataGridView avatarGrid;
         private Label label1;
         private Label label2;
-        private BindingSource editFormAvatarGridBindingSource;
+        private BindingSource avatarGridBindingSource;
         private DataGridViewCheckBoxColumn isSelectedDataGridViewCheckBoxColumn;
         private DataGridViewImageColumn avatarThumbnailDataGridViewImageColumn;
         private DataGridViewTextBoxColumn avatarNameDataGridViewTextBoxColumn;

@@ -1,8 +1,10 @@
 using AvatarManager.Core.Helper;
 using AvatarManager.Core.Infrastructures.Database;
 using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
+using AvatarManager.Core.Models;
 using AvatarManager.Core.Services.interfaces;
 using AvatarManager.WinForm.Properties;
+using System.Data;
 using VRChat.API.Model;
 
 namespace AvatarManager.WinForm.Forms;
@@ -15,6 +17,9 @@ public partial class MainWindow : Form
     private readonly IImageService _imageService;
     private readonly IFolderService _folderService;
     private int currentFolderIndex = 0;
+    private DataTable _avatarDataTable = new DataTable();
+    private BindingSource _avatarBindingSource = new BindingSource();
+    private List<Tuple<Bitmap, string>> _avatarThumbnails = new List<Tuple<Bitmap, string>>();
 
     /// <summary>
     /// コンストラクタ
@@ -70,8 +75,23 @@ public partial class MainWindow : Form
         load.StartPosition = FormStartPosition.CenterParent;
         load.ShowDialog();
 
+        // avatarThumbnail生成
+        await GenerateAvatarThumbnailBitMapListAsync();
+
+        // DataTable初期化
+        InitDataTable();
+
+        // avatarGridView 設定
+        avatarGrid.RowTemplate.Height = 70;
+        avatarGrid.RowTemplate.ContextMenuStrip = avatarRightClickMenu;
+        avatarGrid.RowTemplate.DefaultCellStyle.Font = new Font("Yu Gothic UI", 12);
+
         // folderGridView 生成
         await GenerateFolderGridAsync();
+
+        // avatarGridView BindingSource設定
+        _avatarBindingSource.DataSource = _avatarDataTable;
+        avatarGridBindingSource.DataSource = _avatarBindingSource;
     }
 
     /// <summary>
@@ -178,23 +198,45 @@ public partial class MainWindow : Form
     }
 
     /// <summary>
+    /// avatarGridで右クリックメニューが開かれるときの処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void avatarRightClickMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        var mousePosition = avatarGrid.PointToClient(Cursor.Position);
+        var hitTestInfo = avatarGrid.HitTest(mousePosition.X, mousePosition.Y);
+
+        if (hitTestInfo.RowIndex >= 0)
+        {
+            // 右クリックされた行のindexをtagにセット
+            avatarRightClickMenu.Tag = hitTestInfo.RowIndex;
+        }
+        else
+        {
+            e.Cancel = true;
+        }
+    }
+
+    /// <summary>
     /// avatarGridで右クリックメニューの表示名を編集がクリックされたときの処理
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private async void editAvatarDisplayNameMenuItem_Click(object sender, EventArgs e)
     {
-        var source = avatarRightClickMenu.SourceControl as DataGridView;
-        var clickedRow = source.HitTest(source.PointToClient(Cursor.Position).X, source.PointToClient(Cursor.Position).Y).RowIndex;
-        var clickedAvatarId = avatarGrid.Rows[clickedRow].Cells[2].Value.ToString();
-        var currentAvatarDisplayName =
-            await _avatarService.GetDisplayNameByAvatarIdAsync(clickedAvatarId);
-        var form = new DisplayNameEditForm(currentAvatarDisplayName ?? null, clickedAvatarId, _avatarService);
-        form.StartPosition = FormStartPosition.CenterParent;
-        form.ShowDialog();
-        currentFolderIndex = 0;
-        folderGrid.Rows.Clear();
-        await GenerateFolderGridAsync();
+        // 右クリックされた行のindexをTagから取得
+        if (avatarRightClickMenu.Tag is int rowIndex && rowIndex >= 0)
+        {
+            var clickedAvatarId = avatarGrid.Rows[rowIndex].Cells[2].Value.ToString();
+            var currentAvatarDisplayName = await _avatarService.GetDisplayNameByAvatarIdAsync(clickedAvatarId);
+            var form = new DisplayNameEditForm(currentAvatarDisplayName ?? null, clickedAvatarId, _avatarService);
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ShowDialog();
+            currentFolderIndex = 0;
+            folderGrid.Rows.Clear();
+            await GenerateFolderGridAsync();
+        }
     }
     #endregion
 
@@ -241,31 +283,19 @@ public partial class MainWindow : Form
     /// <returns></returns>
     private async Task GenerateFolderAvatarGridAsync()
     {
-        avatarGrid.Rows.Clear();
+        _avatarDataTable.Clear();
         var folderId = folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString();
         var folder = await _folderService.GetFolderAsync(folderId);
 
         if (folder == null)
         {
             var avatars = await _avatarService.GetUnCategorizedAvatarsAsync();
-            foreach (var a in avatars)
-            {
-                var i = avatarGrid.Rows.Add(new Bitmap(a.ImagePath), a.DisplayName != null ? $"{a.DisplayName} ({a.Name})" : a.Name, a.Id);
-                avatarGrid.Rows[i].Height = 70;
-                avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
-                avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
-            }
+            SetAvatarDataTable(avatars);
         }
         else
         {
             var allAvatars = await _avatarService.GetCachedAvatarsAsync();
-            foreach (var a in folder.ContainAvatarIds)
-            {
-                var i = avatarGrid.Rows.Add(new Bitmap(allAvatars.Single(x => x.Id == a).ImagePath), allAvatars.Single(x => x.Id == a).DisplayName != null ? $"{allAvatars.Single(x => x.Id == a).DisplayName} ({allAvatars.Single(x => x.Id == a).Name})" : allAvatars.Single(x => x.Id == a).Name, a);
-                avatarGrid.Rows[i].Height = 70;
-                avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
-                avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
-            }
+            SetAvatarDataTable(allAvatars.Where(x => folder.ContainAvatarIds.Contains(x.Id)).ToList());
         }
     }
 
@@ -275,18 +305,8 @@ public partial class MainWindow : Form
     /// <returns></returns>
     private async Task GenerateUnCategorizedAvatarGridAsync()
     {
-        var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
-
-        // create grid
-        cachedAvatars.Clear();
-        cachedAvatars = await _avatarService.GetUnCategorizedAvatarsAsync();
-        foreach (var c in cachedAvatars)
-        {
-            var i = avatarGrid.Rows.Add(new Bitmap(c.ImagePath), c.DisplayName != null ? $"{c.DisplayName} ({c.Name})" : c.Name, c.Id);
-            avatarGrid.Rows[i].Height = 70;
-            avatarGrid.Rows[i].Cells[1].Style.Font = new Font("Yu Gothic UI", 12);
-            avatarGrid.Rows[i].ContextMenuStrip = avatarRightClickMenu;
-        }
+        var cachedAvatars = await _avatarService.GetUnCategorizedAvatarsAsync();
+        SetAvatarDataTable(cachedAvatars);
     }
 
     /// <summary>
@@ -300,6 +320,45 @@ public partial class MainWindow : Form
         auth.StartPosition = FormStartPosition.CenterParent;
         auth.ShowDialog();
         _user = _vrcApi.GetCurrentUser();
+    }
+
+    /// <summary>
+    /// DataTableを初期化する
+    /// </summary>
+    private void InitDataTable()
+    {
+        _avatarDataTable.Columns.Add("AvatarThumbnail", typeof(Bitmap));
+        _avatarDataTable.Columns.Add("AvatarName", typeof(string));
+        _avatarDataTable.Columns.Add("AvatarId", typeof(string));
+    }
+
+    /// <summary>
+    /// DataTableにアバター情報をセットする
+    /// </summary>
+    /// <param name="avatars"></param>
+    private void SetAvatarDataTable(List<OwnedAvatar> avatars)
+    {
+        foreach (var a in avatars)
+        {
+            var row = _avatarDataTable.NewRow();
+            row["AvatarThumbnail"] = _avatarThumbnails.Single(x => x.Item2 == a.Id).Item1;
+            row["AvatarName"] = a.DisplayName != null ? $"{a.DisplayName} ({a.Name})" : a.Name;
+            row["AvatarId"] = a.Id;
+            _avatarDataTable.Rows.Add(row);
+        }
+    }
+
+    /// <summary>
+    /// アバターサムネイルのビットマップリストを生成する
+    /// </summary>
+    /// <returns></returns>
+    private async Task GenerateAvatarThumbnailBitMapListAsync()
+    {
+        var avatars = await _avatarService.GetCachedAvatarsAsync();
+        foreach (var a in avatars)
+        {
+            _avatarThumbnails.Add(new(new Bitmap(a.ImagePath), a.Id));
+        }
     }
     #endregion
 }
