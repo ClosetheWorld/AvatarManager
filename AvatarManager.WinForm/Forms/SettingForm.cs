@@ -37,7 +37,7 @@ namespace AvatarManager.WinForm.Forms
             }
 
             _bindingSource.DataSource = _dataTable;
-            editFormAvatarGridBindingSource.DataSource = _bindingSource;
+            avatarGridBindingSource.DataSource = _bindingSource;
         }
 
         /// <summary>
