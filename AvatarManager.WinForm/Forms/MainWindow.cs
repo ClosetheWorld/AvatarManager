@@ -21,6 +21,8 @@ public partial class MainWindow : Form
     private readonly IImageService _imageService;
     private readonly IFolderService _folderService;
     private int currentFolderIndex = 0;
+    private DataTable _folderDataTable = new DataTable();
+    private BindingSource _folderBindingSource = new BindingSource();
     private DataTable _avatarDataTable = new DataTable();
     private BindingSource _avatarBindingSource = new BindingSource();
     private List<Tuple<Bitmap, string>> _avatarThumbnails = new List<Tuple<Bitmap, string>>();
@@ -89,10 +91,19 @@ public partial class MainWindow : Form
         // DataTable初期化
         InitDataTable();
 
+        // folderGridView 設定
+        folderGrid.RowTemplate.Height = 100;
+        folderGrid.RowTemplate.ContextMenuStrip = folderRightClickMenu;
+        folderGrid.RowTemplate.DefaultCellStyle.Font = new Font("Yu Gothic UI", 12);
+
         // avatarGridView 設定
         avatarGrid.RowTemplate.Height = 70;
         avatarGrid.RowTemplate.ContextMenuStrip = avatarRightClickMenu;
         avatarGrid.RowTemplate.DefaultCellStyle.Font = new Font("Yu Gothic UI", 12);
+
+        // folderGridView BindingSource設定
+        _folderBindingSource.DataSource = _folderDataTable;
+        folderGridBindingSource.DataSource = _folderBindingSource;
 
         // folderGridView 生成
         await GenerateFolderGridAsync();
@@ -135,7 +146,7 @@ public partial class MainWindow : Form
 
         // update folder grid
         currentFolderIndex = 0;
-        folderGrid.Rows.Clear();
+        _folderDataTable.Clear();
         await GenerateFolderGridAsync();
     }
 
@@ -171,7 +182,7 @@ public partial class MainWindow : Form
         {
             await _folderService.DeleteFolderAsync(folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
             currentFolderIndex = 0;
-            folderGrid.Rows.Clear();
+            _folderDataTable.Clear();
             await GenerateFolderGridAsync();
             MessageBox.Show("削除しました");
         }
@@ -189,7 +200,7 @@ public partial class MainWindow : Form
         _settingForm.StartPosition = FormStartPosition.CenterParent;
         _settingForm.ShowDialog();
         currentFolderIndex = 0;
-        folderGrid.Rows.Clear();
+        _folderDataTable.Clear();
         await GenerateFolderGridAsync();
     }
 
@@ -244,7 +255,7 @@ public partial class MainWindow : Form
             _displayNameEditForm.StartPosition = FormStartPosition.CenterParent;
             _displayNameEditForm.ShowDialog();
             currentFolderIndex = 0;
-            folderGrid.Rows.Clear();
+            _folderDataTable.Clear();
             await GenerateFolderGridAsync();
         }
     }
@@ -259,19 +270,10 @@ public partial class MainWindow : Form
     {
         // dbにあるフォルダでfolderGridを生成
         var folders = await _folderService.GetFoldersAsync();
-
-        foreach (var f in folders)
-        {
-            var i = folderGrid.Rows.Add(f.Name, f.Id);
-            folderGrid.Rows[i].Height = 100;
-            folderGrid.Rows[i].Cells[0].Style.Font = new Font("Yu Gothic UI", 12);
-            folderGrid.Rows[i].ContextMenuStrip = folderRightClickMenu;
-        }
+        SetFolderDataTable(folders);
 
         // 末尾
-        var idx = folderGrid.Rows.Add("未分類", "unLabeled");
-        folderGrid.Rows[idx].Height = 100;
-        folderGrid.Rows[idx].Cells[0].Style.Font = new Font("Yu Gothic UI", 12);
+        SetFolderDataTableLastRow();
 
         // 先頭にフォーカス
         folderGrid.CurrentCell = folderGrid.Rows[0].Cells[0];
@@ -336,6 +338,9 @@ public partial class MainWindow : Form
     /// </summary>
     private void InitDataTable()
     {
+        _folderDataTable.Columns.Add("Id", typeof(string));
+        _folderDataTable.Columns.Add("FolderName", typeof(string));
+
         _avatarDataTable.Columns.Add("AvatarThumbnail", typeof(Bitmap));
         _avatarDataTable.Columns.Add("AvatarName", typeof(string));
         _avatarDataTable.Columns.Add("AvatarId", typeof(string));
@@ -355,6 +360,32 @@ public partial class MainWindow : Form
             row["AvatarId"] = a.Id;
             _avatarDataTable.Rows.Add(row);
         }
+    }
+
+    /// <summary>
+    /// DataTableにフォルダ情報をセットする
+    /// </summary>
+    /// <param name="folders"></param>
+    private void SetFolderDataTable(List<Folder> folders)
+    {
+        foreach (var f in folders)
+        {
+            var row = _folderDataTable.NewRow();
+            row["Id"] = f.Id;
+            row["FolderName"] = f.Name;
+            _folderDataTable.Rows.Add(row);
+        }
+    }
+
+    /// <summary>
+    /// DataTableに未分類のフォルダ情報をセットする
+    /// </summary>
+    private void SetFolderDataTableLastRow()
+    {
+        var row = _folderDataTable.NewRow();
+        row["Id"] = "unLabeled";
+        row["FolderName"] = "未分類";
+        _folderDataTable.Rows.Add(row);
     }
 
     /// <summary>
