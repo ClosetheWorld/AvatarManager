@@ -7,12 +7,14 @@ namespace AvatarManager.WinForm.Forms
         private readonly IAvatarService _avatarService;
         private string _avatarId;
 
-        public DisplayNameEditForm(string currentAvatarDisplayName, string avatarId, IAvatarService avatarService)
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="avatarService"></param>
+        public DisplayNameEditForm(IAvatarService avatarService)
         {
             _avatarService = avatarService;
-            _avatarId = avatarId;
             InitializeComponent();
-            displayNameTextBox.Text = currentAvatarDisplayName;
         }
 
         #region EventHandlers
@@ -32,8 +34,7 @@ namespace AvatarManager.WinForm.Forms
                 await _avatarService.UpdateDisplayNameByAvatarIdAsync(_avatarId, null);
             }
 
-            Close();
-            Dispose();
+            Visible = false;
         }
 
         /// <summary>
@@ -47,6 +48,34 @@ namespace AvatarManager.WinForm.Forms
             {
                 this.saveButton_Click(sender, e);
             }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// フォームが表示されたときの処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DisplayNameEditForm_Shown(object sender, EventArgs e)
+        {
+            displayNameTextBox.Focus();
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// パラメータをセットする
+        /// </summary>
+        /// <param name="currentAvatarDisplayName"></param>
+        /// <param name="avatarId"></param>
+        public void SetParameters(string currentAvatarDisplayName, string avatarId)
+        {
+            _avatarId = avatarId;
+            displayNameTextBox.Text = currentAvatarDisplayName;
         }
         #endregion
     }

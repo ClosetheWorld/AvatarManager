@@ -13,6 +13,7 @@ public partial class MainWindow : Form
 {
     private IVRChatApiClient _vrcApi;
     private CurrentUser _user;
+    private static DisplayNameEditForm _displayNameEditForm;
     private readonly IAvatarService _avatarService;
     private readonly IImageService _imageService;
     private readonly IFolderService _folderService;
@@ -30,12 +31,14 @@ public partial class MainWindow : Form
     /// <param name="imageService"></param>
     /// <param name="folderService"></param>
     public MainWindow(IVRChatApiClient vrcApiClient, ApplicationDbContext dbContext,
-        IAvatarService avatarService, IImageService imageService, IFolderService folderService)
+        IAvatarService avatarService, IImageService imageService, IFolderService folderService,
+        DisplayNameEditForm displayNameEditForm)
     {
         _vrcApi = vrcApiClient;
         _avatarService = avatarService;
         _imageService = imageService;
         _folderService = folderService;
+        _displayNameEditForm = displayNameEditForm;
 
         Settings.Default.Upgrade();
         if (string.IsNullOrEmpty(Settings.Default.authToken))
@@ -230,9 +233,9 @@ public partial class MainWindow : Form
         {
             var clickedAvatarId = avatarGrid.Rows[rowIndex].Cells[2].Value.ToString();
             var currentAvatarDisplayName = await _avatarService.GetDisplayNameByAvatarIdAsync(clickedAvatarId);
-            var form = new DisplayNameEditForm(currentAvatarDisplayName ?? null, clickedAvatarId, _avatarService);
-            form.StartPosition = FormStartPosition.CenterParent;
-            form.ShowDialog();
+            _displayNameEditForm.SetParameters(currentAvatarDisplayName ?? null, clickedAvatarId);
+            _displayNameEditForm.StartPosition = FormStartPosition.CenterParent;
+            _displayNameEditForm.ShowDialog();
             currentFolderIndex = 0;
             folderGrid.Rows.Clear();
             await GenerateFolderGridAsync();
