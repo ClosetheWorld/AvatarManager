@@ -32,20 +32,24 @@
             userName = new Label();
             loginPlaceHolder = new Label();
             avatarGrid = new DataGridView();
-            AvatarThumbnail = new DataGridViewImageColumn();
-            AvatarName = new DataGridViewTextBoxColumn();
-            AvatarId = new DataGridViewTextBoxColumn();
+            avatarGridBindingSource = new BindingSource(components);
             folderGrid = new DataGridView();
-            Folders = new DataGridViewTextBoxColumn();
-            FolderId = new DataGridViewTextBoxColumn();
+            folderNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            folderGridBindingSource = new BindingSource(components);
             settingButton = new Button();
             folderRightClickMenu = new ContextMenuStrip(components);
             editMenuItem = new ToolStripMenuItem();
             deleteMenuItem = new ToolStripMenuItem();
             avatarRightClickMenu = new ContextMenuStrip(components);
             editAvatarDisplayNameMenuItem = new ToolStripMenuItem();
+            avatarThumbnailDataGridViewImageColumn = new DataGridViewImageColumn();
+            avatarNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            avatarIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)avatarGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)avatarGridBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)folderGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)folderGridBindingSource).BeginInit();
             folderRightClickMenu.SuspendLayout();
             avatarRightClickMenu.SuspendLayout();
             SuspendLayout();
@@ -76,8 +80,10 @@
             avatarGrid.AllowUserToDeleteRows = false;
             avatarGrid.AllowUserToResizeRows = false;
             avatarGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            avatarGrid.AutoGenerateColumns = false;
             avatarGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            avatarGrid.Columns.AddRange(new DataGridViewColumn[] { AvatarThumbnail, AvatarName, AvatarId });
+            avatarGrid.Columns.AddRange(new DataGridViewColumn[] { avatarThumbnailDataGridViewImageColumn, avatarNameDataGridViewTextBoxColumn, avatarIdDataGridViewTextBoxColumn });
+            avatarGrid.DataSource = avatarGridBindingSource;
             avatarGrid.Location = new Point(245, 32);
             avatarGrid.MultiSelect = false;
             avatarGrid.Name = "avatarGrid";
@@ -88,31 +94,9 @@
             avatarGrid.TabIndex = 2;
             avatarGrid.CellClick += avatarGrid_CellClick;
             // 
-            // AvatarThumbnail
+            // avatarGridBindingSource
             // 
-            AvatarThumbnail.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            AvatarThumbnail.FillWeight = 20F;
-            AvatarThumbnail.HeaderText = "サムネイル";
-            AvatarThumbnail.ImageLayout = DataGridViewImageCellLayout.Zoom;
-            AvatarThumbnail.Name = "AvatarThumbnail";
-            AvatarThumbnail.ReadOnly = true;
-            AvatarThumbnail.Resizable = DataGridViewTriState.False;
-            // 
-            // AvatarName
-            // 
-            AvatarName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            AvatarName.FillWeight = 80F;
-            AvatarName.HeaderText = "アバター名";
-            AvatarName.Name = "AvatarName";
-            AvatarName.ReadOnly = true;
-            AvatarName.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // AvatarId
-            // 
-            AvatarId.HeaderText = "";
-            AvatarId.Name = "AvatarId";
-            AvatarId.ReadOnly = true;
-            AvatarId.Visible = false;
+            avatarGridBindingSource.DataSource = typeof(Core.Models.Binding.MainWindowAvatarGrid);
             // 
             // folderGrid
             // 
@@ -120,9 +104,11 @@
             folderGrid.AllowUserToDeleteRows = false;
             folderGrid.AllowUserToResizeRows = false;
             folderGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            folderGrid.AutoGenerateColumns = false;
             folderGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             folderGrid.ColumnHeadersVisible = false;
-            folderGrid.Columns.AddRange(new DataGridViewColumn[] { Folders, FolderId });
+            folderGrid.Columns.AddRange(new DataGridViewColumn[] { folderNameDataGridViewTextBoxColumn, idDataGridViewTextBoxColumn });
+            folderGrid.DataSource = folderGridBindingSource;
             folderGrid.Location = new Point(12, 32);
             folderGrid.MultiSelect = false;
             folderGrid.Name = "folderGrid";
@@ -132,21 +118,26 @@
             folderGrid.TabIndex = 3;
             folderGrid.CellClick += folderGrid_CellClick;
             // 
-            // Folders
+            // folderNameDataGridViewTextBoxColumn
             // 
-            Folders.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Folders.HeaderText = "";
-            Folders.Name = "Folders";
-            Folders.ReadOnly = true;
-            Folders.Resizable = DataGridViewTriState.False;
-            Folders.SortMode = DataGridViewColumnSortMode.NotSortable;
+            folderNameDataGridViewTextBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            folderNameDataGridViewTextBoxColumn.DataPropertyName = "FolderName";
+            folderNameDataGridViewTextBoxColumn.HeaderText = "";
+            folderNameDataGridViewTextBoxColumn.Name = "folderNameDataGridViewTextBoxColumn";
+            folderNameDataGridViewTextBoxColumn.ReadOnly = true;
+            folderNameDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.False;
             // 
-            // FolderId
+            // idDataGridViewTextBoxColumn
             // 
-            FolderId.HeaderText = "";
-            FolderId.Name = "FolderId";
-            FolderId.ReadOnly = true;
-            FolderId.Visible = false;
+            idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            idDataGridViewTextBoxColumn.HeaderText = "Id";
+            idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            idDataGridViewTextBoxColumn.ReadOnly = true;
+            idDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // folderGridBindingSource
+            // 
+            folderGridBindingSource.DataSource = typeof(Core.Models.Binding.MainWindowFolderGrid);
             // 
             // settingButton
             // 
@@ -187,14 +178,44 @@
             avatarRightClickMenu.Items.AddRange(new ToolStripItem[] { editAvatarDisplayNameMenuItem });
             avatarRightClickMenu.Name = "avatarRightClickMenu";
             avatarRightClickMenu.RenderMode = ToolStripRenderMode.System;
-            avatarRightClickMenu.Size = new Size(181, 48);
+            avatarRightClickMenu.Size = new Size(144, 26);
+            avatarRightClickMenu.Opening += avatarRightClickMenu_Opening;
             // 
             // editAvatarDisplayNameMenuItem
             // 
             editAvatarDisplayNameMenuItem.Name = "editAvatarDisplayNameMenuItem";
-            editAvatarDisplayNameMenuItem.Size = new Size(180, 22);
+            editAvatarDisplayNameMenuItem.Size = new Size(143, 22);
             editAvatarDisplayNameMenuItem.Text = "表示名を編集";
             editAvatarDisplayNameMenuItem.Click += editAvatarDisplayNameMenuItem_Click;
+            // 
+            // avatarThumbnailDataGridViewImageColumn
+            // 
+            avatarThumbnailDataGridViewImageColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            avatarThumbnailDataGridViewImageColumn.DataPropertyName = "AvatarThumbnail";
+            avatarThumbnailDataGridViewImageColumn.FillWeight = 20F;
+            avatarThumbnailDataGridViewImageColumn.HeaderText = "サムネイル";
+            avatarThumbnailDataGridViewImageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            avatarThumbnailDataGridViewImageColumn.Name = "avatarThumbnailDataGridViewImageColumn";
+            avatarThumbnailDataGridViewImageColumn.ReadOnly = true;
+            avatarThumbnailDataGridViewImageColumn.Resizable = DataGridViewTriState.False;
+            // 
+            // avatarNameDataGridViewTextBoxColumn
+            // 
+            avatarNameDataGridViewTextBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            avatarNameDataGridViewTextBoxColumn.DataPropertyName = "AvatarName";
+            avatarNameDataGridViewTextBoxColumn.FillWeight = 80F;
+            avatarNameDataGridViewTextBoxColumn.HeaderText = "アバター名";
+            avatarNameDataGridViewTextBoxColumn.Name = "avatarNameDataGridViewTextBoxColumn";
+            avatarNameDataGridViewTextBoxColumn.ReadOnly = true;
+            avatarNameDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.False;
+            // 
+            // avatarIdDataGridViewTextBoxColumn
+            // 
+            avatarIdDataGridViewTextBoxColumn.DataPropertyName = "AvatarId";
+            avatarIdDataGridViewTextBoxColumn.HeaderText = "AvatarId";
+            avatarIdDataGridViewTextBoxColumn.Name = "avatarIdDataGridViewTextBoxColumn";
+            avatarIdDataGridViewTextBoxColumn.ReadOnly = true;
+            avatarIdDataGridViewTextBoxColumn.Visible = false;
             // 
             // MainWindow
             // 
@@ -212,7 +233,9 @@
             Text = "AvatarManager";
             Shown += MainWindow_Shown;
             ((System.ComponentModel.ISupportInitialize)avatarGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)avatarGridBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)folderGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)folderGridBindingSource).EndInit();
             folderRightClickMenu.ResumeLayout(false);
             avatarRightClickMenu.ResumeLayout(false);
             ResumeLayout(false);
@@ -226,15 +249,17 @@
         private DataGridView avatarGrid;
         private DataGridView folderGrid;
         private Button settingButton;
-        private DataGridViewTextBoxColumn Folders;
-        private DataGridViewTextBoxColumn FolderId;
         private ContextMenuStrip folderRightClickMenu;
         private ToolStripMenuItem editMenuItem;
         private ToolStripMenuItem deleteMenuItem;
-        private DataGridViewImageColumn AvatarThumbnail;
-        private DataGridViewTextBoxColumn AvatarName;
-        private DataGridViewTextBoxColumn AvatarId;
         private ContextMenuStrip avatarRightClickMenu;
         private ToolStripMenuItem editAvatarDisplayNameMenuItem;
+        private BindingSource avatarGridBindingSource;
+        private BindingSource folderGridBindingSource;
+        private DataGridViewTextBoxColumn folderNameDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
+        private DataGridViewImageColumn avatarThumbnailDataGridViewImageColumn;
+        private DataGridViewTextBoxColumn avatarNameDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn avatarIdDataGridViewTextBoxColumn;
     }
 }

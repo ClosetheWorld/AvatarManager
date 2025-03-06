@@ -38,6 +38,10 @@ internal static class Program
     private static void ConfigureServices(ServiceCollection services)
     {
         services.AddSingleton<MainWindow>();
+        services.AddSingleton<DisplayNameEditForm>();
+        services.AddSingleton<SettingForm>();
+        services.AddSingleton<LoadingForm>();
+        services.AddSingleton<AuthForm>();
         services.AddScoped<IVRChatApiClient, VRChatApiClient>();
         services.AddScoped<IAvatarService, AvatarService>();
         services.AddScoped<IImageService, ImageService>();
