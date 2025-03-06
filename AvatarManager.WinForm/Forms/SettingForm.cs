@@ -112,6 +112,30 @@ public partial class SettingForm : Form
             Visible = false;
         }
     }
+
+    /// <summary>
+    /// タブが変更されたときの処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void avatarSelectTabControl_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        _dataTable.Clear();
+        searchTextBox.Text = "";
+
+        switch (avatarSelectTabControl.SelectedIndex)
+        {
+            // 全アバター
+            case 0:
+                await GenerateAllAvatarGridAsync();
+                break;
+            // 未分類アバター
+            case 1:
+                await GenerateUncategorizedAvatarGridAsync();
+                break;
+        }
+    }
+
     #endregion
 
     #region Methods
@@ -140,16 +164,17 @@ public partial class SettingForm : Form
     private async Task GenerateAllAvatarGridAsync()
     {
         var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
+        await SetDataTable(cachedAvatars);
+    }
 
-        foreach (var c in cachedAvatars)
-        {
-            var row = _dataTable.NewRow();
-            row["IsSelected"] = string.IsNullOrEmpty(_folderId) ? false : await SetAvatarGridCheckBoxAsync(c.Id);
-            row["AvatarThumbnail"] = _avatarThumbnails.Single(x => x.Item2 == c.Id).Item1;
-            row["AvatarName"] = c.Name;
-            row["AvatarId"] = c.Id;
-            _dataTable.Rows.Add(row);
-        }
+    /// <summary>
+    /// 未分類アバターグリッドを生成する
+    /// </summary>
+    /// <returns></returns>
+    private async Task GenerateUncategorizedAvatarGridAsync()
+    {
+        var uncategorizedAvatars = await _avatarService.GetUnCategorizedAvatarsAsync();
+        await SetDataTable(uncategorizedAvatars);
     }
 
     /// <summary>
@@ -161,6 +186,24 @@ public partial class SettingForm : Form
         _dataTable.Columns.Add("AvatarThumbnail", typeof(Bitmap));
         _dataTable.Columns.Add("AvatarName", typeof(string));
         _dataTable.Columns.Add("AvatarId", typeof(string));
+    }
+
+    /// <summary>
+    /// データテーブルにデータを設定する
+    /// </summary>
+    /// <param name="avatars"></param>
+    /// <returns></returns>
+    private async Task SetDataTable(List<OwnedAvatar> avatars)
+    {
+        foreach (var c in avatars)
+        {
+            var row = _dataTable.NewRow();
+            row["IsSelected"] = string.IsNullOrEmpty(_folderId) ? false : await SetAvatarGridCheckBoxAsync(c.Id);
+            row["AvatarThumbnail"] = _avatarThumbnails.Single(x => x.Item2 == c.Id).Item1;
+            row["AvatarName"] = c.Name;
+            row["AvatarId"] = c.Id;
+            _dataTable.Rows.Add(row);
+        }
     }
 
     /// <summary>
