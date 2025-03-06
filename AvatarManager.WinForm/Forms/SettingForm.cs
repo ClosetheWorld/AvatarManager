@@ -121,6 +121,7 @@ public partial class SettingForm : Form
     private async void avatarSelectTabControl_SelectedIndexChanged(object sender, EventArgs e)
     {
         _dataTable.Clear();
+        _bindingSource.DataSource = _dataTable;
         searchTextBox.Text = "";
 
         switch (avatarSelectTabControl.SelectedIndex)
