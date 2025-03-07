@@ -35,6 +35,7 @@ public partial class SettingForm : Form
         searchTextBox.Text = "";
         _bindingSource.DataSource = _dataTable;
         avatarGridBindingSource.DataSource = _bindingSource;
+        avatarSelectTabControl.SelectedIndex = 0;
 
         await GenerateAllAvatarGridAsync();
         if (_folderId != null)
@@ -78,12 +79,23 @@ public partial class SettingForm : Form
         }
         else
         {
-            await _folderService.UpdateFolderAsync(new Folder
+            switch (avatarSelectTabControl.SelectedIndex)
             {
-                Id = _folderId,
-                Name = folderNameTextBox.Text,
-                ContainAvatarIds = avatars
-            });
+                // 全アバタータブの時はフォルダを置換
+                case 0:
+                    // TODO: Folderをnewしない
+                    await _folderService.UpdateFolderAsync(new Folder
+                    {
+                        Id = _folderId,
+                        Name = folderNameTextBox.Text,
+                        ContainAvatarIds = avatars
+                    });
+                    break;
+                // 未分類アバタータブの時はフォルダに追加
+                case 1:
+                    await _folderService.AddContainAvatarIdToExistsFolderAsync(_folderId, avatars);
+                    break;
+            }
         }
 
         Visible = false;
@@ -97,6 +109,30 @@ public partial class SettingForm : Form
     private void searchTextBox_TextChanged(object sender, EventArgs e)
     {
         _bindingSource.Filter = $"AvatarName like '%{searchTextBox.Text}%'";
+    }
+
+    /// <summary>
+    /// タブが変更されたときの処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void avatarSelectTabControl_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        _dataTable.Clear();
+        _bindingSource.DataSource = _dataTable;
+        searchTextBox.Text = "";
+
+        switch (avatarSelectTabControl.SelectedIndex)
+        {
+            // 全アバター
+            case 0:
+                await GenerateAllAvatarGridAsync();
+                break;
+            // 未分類アバター
+            case 1:
+                await GenerateUncategorizedAvatarGridAsync();
+                break;
+        }
     }
 
     #endregion
@@ -127,16 +163,17 @@ public partial class SettingForm : Form
     private async Task GenerateAllAvatarGridAsync()
     {
         var cachedAvatars = await _avatarService.GetCachedAvatarsAsync();
+        await SetDataTable(cachedAvatars);
+    }
 
-        foreach (var c in cachedAvatars)
-        {
-            var row = _dataTable.NewRow();
-            row["IsSelected"] = string.IsNullOrEmpty(_folderId) ? false : await SetAvatarGridCheckBoxAsync(c.Id);
-            row["AvatarThumbnail"] = _avatarThumbnails.Single(x => x.Item2 == c.Id).Item1;
-            row["AvatarName"] = c.Name;
-            row["AvatarId"] = c.Id;
-            _dataTable.Rows.Add(row);
-        }
+    /// <summary>
+    /// 未分類アバターグリッドを生成する
+    /// </summary>
+    /// <returns></returns>
+    private async Task GenerateUncategorizedAvatarGridAsync()
+    {
+        var uncategorizedAvatars = await _avatarService.GetUnCategorizedAvatarsAsync();
+        await SetDataTable(uncategorizedAvatars);
     }
 
     /// <summary>
@@ -148,6 +185,24 @@ public partial class SettingForm : Form
         _dataTable.Columns.Add("AvatarThumbnail", typeof(Bitmap));
         _dataTable.Columns.Add("AvatarName", typeof(string));
         _dataTable.Columns.Add("AvatarId", typeof(string));
+    }
+
+    /// <summary>
+    /// データテーブルにデータを設定する
+    /// </summary>
+    /// <param name="avatars"></param>
+    /// <returns></returns>
+    private async Task SetDataTable(List<OwnedAvatar> avatars)
+    {
+        foreach (var c in avatars)
+        {
+            var row = _dataTable.NewRow();
+            row["IsSelected"] = string.IsNullOrEmpty(_folderId) ? false : await SetAvatarGridCheckBoxAsync(c.Id);
+            row["AvatarThumbnail"] = _avatarThumbnails.Single(x => x.Item2 == c.Id).Item1;
+            row["AvatarName"] = c.Name;
+            row["AvatarId"] = c.Id;
+            _dataTable.Rows.Add(row);
+        }
     }
 
     /// <summary>
