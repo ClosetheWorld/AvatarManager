@@ -210,7 +210,7 @@
             uncategorizedAvatarTab.Padding = new Padding(3);
             uncategorizedAvatarTab.Size = new Size(768, 402);
             uncategorizedAvatarTab.TabIndex = 1;
-            uncategorizedAvatarTab.Text = "未分類";
+            uncategorizedAvatarTab.Text = "未分類のアバター";
             uncategorizedAvatarTab.UseVisualStyleBackColor = true;
             // 
             // uncategorizedAvatarGrid
