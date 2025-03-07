@@ -36,6 +36,7 @@ public partial class SettingForm : Form
         _bindingSource.DataSource = _dataTable;
         avatarGridBindingSource.DataSource = _bindingSource;
         avatarGrid.Focus();
+        avatarSelectTabControl.SelectedIndex = 0;
 
         await GenerateAllAvatarGridAsync();
         if (_folderId != null)
