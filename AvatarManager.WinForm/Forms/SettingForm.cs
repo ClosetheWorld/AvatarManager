@@ -35,6 +35,7 @@ public partial class SettingForm : Form
         searchTextBox.Text = "";
         _bindingSource.DataSource = _dataTable;
         avatarGridBindingSource.DataSource = _bindingSource;
+        avatarSelectTabControl.SelectedIndex = 0;
 
         await GenerateAllAvatarGridAsync();
         if (_folderId != null)
