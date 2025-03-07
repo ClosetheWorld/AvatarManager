@@ -80,12 +80,23 @@ public partial class SettingForm : Form
         }
         else
         {
-            await _folderService.UpdateFolderAsync(new Folder
+            switch (avatarSelectTabControl.SelectedIndex)
             {
-                Id = _folderId,
-                Name = folderNameTextBox.Text,
-                ContainAvatarIds = avatars
-            });
+                // 全アバタータブの時はフォルダを置換
+                case 0:
+                    // TODO: Folderをnewしない
+                    await _folderService.UpdateFolderAsync(new Folder
+                    {
+                        Id = _folderId,
+                        Name = folderNameTextBox.Text,
+                        ContainAvatarIds = avatars
+                    });
+                    break;
+                // 未分類アバタータブの時はフォルダに追加
+                case 1:
+                    await _folderService.AddContainAvatarIdToExistsFolderAsync(_folderId, avatars);
+                    break;
+            }
         }
 
         Visible = false;
