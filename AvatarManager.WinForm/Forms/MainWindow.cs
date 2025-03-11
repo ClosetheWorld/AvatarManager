@@ -68,6 +68,7 @@ public partial class MainWindow : Form
         }
         InitializeComponent();
         userName.Text = _user.DisplayName;
+        Text = $"AvatarManager v{Application.ProductVersion}";
     }
 
     #region EventHandlers
