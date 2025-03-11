@@ -62,6 +62,7 @@
             avatarGrid.RowTemplate.Height = 70;
             avatarGrid.Size = new Size(776, 406);
             avatarGrid.TabIndex = 7;
+            avatarGrid.KeyDown += avatarGrid_KeyDown;
             // 
             // isSelectedDataGridViewCheckBoxColumn
             // 
