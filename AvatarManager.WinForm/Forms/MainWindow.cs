@@ -32,8 +32,11 @@ public partial class MainWindow : Form
     /// <param name="vrcApiClient"></param>
     /// <param name="dbContext"></param>
     /// <param name="avatarService"></param>
-    /// <param name="imageService"></param>
     /// <param name="folderService"></param>
+    /// <param name="displayNameEditForm"></param>
+    /// <param name="settingForm"></param>
+    /// <param name="loadingForm"></param>
+    /// <param name="authForm"></param>
     public MainWindow(IVRChatApiClient vrcApiClient, ApplicationDbContext dbContext,
         IAvatarService avatarService, IFolderService folderService,
         DisplayNameEditForm displayNameEditForm, SettingForm settingForm, LoadingForm loadingForm, AuthForm authForm)
