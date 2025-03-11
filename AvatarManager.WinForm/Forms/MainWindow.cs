@@ -18,7 +18,6 @@ public partial class MainWindow : Form
     private readonly DisplayNameEditForm _displayNameEditForm;
     private readonly SettingForm _settingForm;
     private readonly IAvatarService _avatarService;
-    private readonly IImageService _imageService;
     private readonly IFolderService _folderService;
     private int currentFolderIndex = 0;
     private DataTable _folderDataTable = new DataTable();
@@ -36,12 +35,11 @@ public partial class MainWindow : Form
     /// <param name="imageService"></param>
     /// <param name="folderService"></param>
     public MainWindow(IVRChatApiClient vrcApiClient, ApplicationDbContext dbContext,
-        IAvatarService avatarService, IImageService imageService, IFolderService folderService,
+        IAvatarService avatarService, IFolderService folderService,
         DisplayNameEditForm displayNameEditForm, SettingForm settingForm, LoadingForm loadingForm, AuthForm authForm)
     {
         _vrcApi = vrcApiClient;
         _avatarService = avatarService;
-        _imageService = imageService;
         _folderService = folderService;
         _authForm = authForm;
         _loadingForm = loadingForm;
