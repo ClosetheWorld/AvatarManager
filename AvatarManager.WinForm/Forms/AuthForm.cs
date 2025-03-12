@@ -2,6 +2,7 @@
 using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
 using AvatarManager.WinForm.Properties;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace AvatarManager.WinForm.Forms;
 
@@ -39,6 +40,7 @@ public partial class AuthForm : Form
                     "認証エラー",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"{Application.CompanyName}"), true);
                 return;
             }
             var user = await _vrcApi.GetCurrentUserAsync();
