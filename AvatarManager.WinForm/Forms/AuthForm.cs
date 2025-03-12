@@ -2,7 +2,6 @@
 using AvatarManager.Core.Infrastructures.ExternalServices.Interfaces;
 using AvatarManager.WinForm.Properties;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace AvatarManager.WinForm.Forms;
 
