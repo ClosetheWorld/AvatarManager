@@ -35,12 +35,13 @@ public partial class SettingForm : Form
         searchTextBox.Text = "";
         _bindingSource.DataSource = _dataTable;
         avatarGridBindingSource.DataSource = _bindingSource;
+        avatarGrid.Focus();
 
         await GenerateAllAvatarGridAsync();
         if (_folderId != null)
         {
             await SetFolderNameAsync();
-            this.Text = "フォルダ編集";
+            Text = "フォルダ編集";
         }
         else
         {
@@ -99,6 +100,18 @@ public partial class SettingForm : Form
         _bindingSource.Filter = $"AvatarName like '%{searchTextBox.Text}%'";
     }
 
+    /// <summary>
+    /// キーダウン時の処理
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void avatarGrid_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Escape)
+        {
+            Visible = false;
+        }
+    }
     #endregion
 
     #region Methods

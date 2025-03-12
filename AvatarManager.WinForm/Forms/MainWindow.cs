@@ -32,8 +32,11 @@ public partial class MainWindow : Form
     /// <param name="vrcApiClient"></param>
     /// <param name="dbContext"></param>
     /// <param name="avatarService"></param>
-    /// <param name="imageService"></param>
     /// <param name="folderService"></param>
+    /// <param name="displayNameEditForm"></param>
+    /// <param name="settingForm"></param>
+    /// <param name="loadingForm"></param>
+    /// <param name="authForm"></param>
     public MainWindow(IVRChatApiClient vrcApiClient, ApplicationDbContext dbContext,
         IAvatarService avatarService, IFolderService folderService,
         DisplayNameEditForm displayNameEditForm, SettingForm settingForm, LoadingForm loadingForm, AuthForm authForm)
@@ -194,13 +197,17 @@ public partial class MainWindow : Form
     /// <param name="e"></param>
     private async void editMenuItem_Click(object sender, EventArgs e)
     {
-        _settingForm.SetFolderId(folderGrid.Rows[currentFolderIndex].Cells[1].Value.ToString());
-        _settingForm.SetBitmapList(_avatarThumbnails);
-        _settingForm.StartPosition = FormStartPosition.CenterParent;
-        _settingForm.ShowDialog();
-        currentFolderIndex = 0;
-        _folderDataTable.Clear();
-        await GenerateFolderGridAsync();
+        // 右クリックされた行のindexをTagから取得
+        if (folderRightClickMenu.Tag is int rowIndex && rowIndex >= 0)
+        {
+            _settingForm.SetFolderId(folderGrid.Rows[rowIndex].Cells[1].Value.ToString());
+            _settingForm.SetBitmapList(_avatarThumbnails);
+            _settingForm.StartPosition = FormStartPosition.CenterParent;
+            _settingForm.ShowDialog();
+            currentFolderIndex = 0;
+            _folderDataTable.Clear();
+            await GenerateFolderGridAsync();
+        }
     }
 
     /// <summary>
@@ -210,8 +217,21 @@ public partial class MainWindow : Form
     /// <param name="e"></param>
     private void folderRightClickMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
     {
+        var mousePosition = folderGrid.PointToClient(Cursor.Position);
+        var hitTestInfo = folderGrid.HitTest(mousePosition.X, mousePosition.Y);
+
         // 未分類を右クリックしたときは編集と削除を非表示
-        if (currentFolderIndex == folderGrid.RowCount - 1)
+        if (hitTestInfo.RowIndex == folderGrid.RowCount - 1)
+        {
+            e.Cancel = true;
+        }
+
+        if (hitTestInfo.RowIndex >= 0)
+        {
+            // 右クリックされた行のindexをtagにセット
+            folderRightClickMenu.Tag = hitTestInfo.RowIndex;
+        }
+        else
         {
             e.Cancel = true;
         }
