@@ -347,6 +347,7 @@ public partial class MainWindow : Form
     {
         Settings.Default.Reset();
         MessageBox.Show(msg, "îFèÿÉGÉâÅ[", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"{Application.CompanyName}"), true);
         _authForm.StartPosition = FormStartPosition.CenterParent;
         _authForm.ShowDialog();
         _user = _vrcApi.GetCurrentUser();
