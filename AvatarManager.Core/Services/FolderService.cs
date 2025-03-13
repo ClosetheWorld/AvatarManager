@@ -50,4 +50,14 @@ public class FolderService : IFolderService
             await _dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task AddContainAvatarIdToExistsFolderAsync(string folderId, List<string> avatarIds)
+    {
+        var current = await _dbContext.Folders.FindAsync(folderId);
+        if(current != null)
+        {
+            current.ContainAvatarIds.AddRange(avatarIds);
+            await _dbContext.SaveChangesAsync();
+        }
+    }
 }

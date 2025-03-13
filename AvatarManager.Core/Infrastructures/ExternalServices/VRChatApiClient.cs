@@ -41,7 +41,7 @@ public class VRChatApiClient : IVRChatApiClient
         }
         catch (Exception e)
         {
-            throw e;
+            throw;
         }
     }
 
