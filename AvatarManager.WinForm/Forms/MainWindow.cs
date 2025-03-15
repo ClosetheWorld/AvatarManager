@@ -101,7 +101,7 @@ public partial class MainWindow : Form
         // avatarGridView 設定
         avatarGrid.RowTemplate.Height = 70;
         avatarGrid.RowTemplate.ContextMenuStrip = avatarRightClickMenu;
-        avatarGrid.RowTemplate.DefaultCellStyle.Font = new Font("Yu Gothic UI", 12);
+        avatarGrid.RowTemplate.DefaultCellStyle.Font = new Font("Yu Gothic UI", 12);        
 
         // folderGridView BindingSource設定
         _folderBindingSource.DataSource = _folderDataTable;
@@ -113,6 +113,8 @@ public partial class MainWindow : Form
         // avatarGridView BindingSource設定
         _avatarBindingSource.DataSource = _avatarDataTable;
         avatarGridBindingSource.DataSource = _avatarBindingSource;
+
+        avatarGrid.CurrentCell = null;
     }
 
     /// <summary>
@@ -159,6 +161,12 @@ public partial class MainWindow : Form
     /// <param name="e"></param>
     private async void avatarGrid_CellClick(object sender, DataGridViewCellEventArgs e)
     {
+        // avatarGridの画像がクリックされた場合フォーカスセルを名前のカラムに変更
+        if (e.ColumnIndex == 0)
+        {
+            avatarGrid.CurrentCell = avatarGrid.Rows[e.RowIndex].Cells[1];
+        }
+
         // avatarGridのヘッダーがクリックされた場合は何もしない
         if (e.RowIndex >= 0)
         {
@@ -322,11 +330,13 @@ public partial class MainWindow : Form
         {
             var avatars = await _avatarService.GetUnCategorizedAvatarsAsync();
             SetAvatarDataTable(avatars);
+            avatarGrid.CurrentCell = null;
         }
         else
         {
             var allAvatars = await _avatarService.GetCachedAvatarsAsync();
             SetAvatarDataTable(allAvatars.Where(x => folder.ContainAvatarIds.Contains(x.Id)).ToList());
+            avatarGrid.CurrentCell = null;
         }
     }
 

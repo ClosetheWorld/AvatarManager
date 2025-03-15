@@ -192,7 +192,8 @@
             // 
             avatarThumbnailDataGridViewImageColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             avatarThumbnailDataGridViewImageColumn.DataPropertyName = "AvatarThumbnail";
-            avatarThumbnailDataGridViewImageColumn.FillWeight = 20F;
+            avatarThumbnailDataGridViewImageColumn.DividerWidth = 1;
+            avatarThumbnailDataGridViewImageColumn.FillWeight = 19F;
             avatarThumbnailDataGridViewImageColumn.HeaderText = "サムネイル";
             avatarThumbnailDataGridViewImageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
             avatarThumbnailDataGridViewImageColumn.Name = "avatarThumbnailDataGridViewImageColumn";
@@ -203,7 +204,8 @@
             // 
             avatarNameDataGridViewTextBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             avatarNameDataGridViewTextBoxColumn.DataPropertyName = "AvatarName";
-            avatarNameDataGridViewTextBoxColumn.FillWeight = 80F;
+            avatarNameDataGridViewTextBoxColumn.DividerWidth = 1;
+            avatarNameDataGridViewTextBoxColumn.FillWeight = 82F;
             avatarNameDataGridViewTextBoxColumn.HeaderText = "アバター名";
             avatarNameDataGridViewTextBoxColumn.Name = "avatarNameDataGridViewTextBoxColumn";
             avatarNameDataGridViewTextBoxColumn.ReadOnly = true;
