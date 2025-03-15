@@ -110,8 +110,17 @@ internal static class Program
         if (File.Exists(DbHelper.GetDatabasePath()))
         {
             var backupPath = $"Data/Backups/AvatarManagerBackup-{DateTime.Now:yyyyMMddHHmmss}.db";
-            var origpath = DbHelper.GetDatabasePath();
             File.Copy(DbHelper.GetDatabasePath(), backupPath);
+        }
+
+        var currentBackupFiles = Directory.GetFiles("Data/Backups");
+        currentBackupFiles = currentBackupFiles.OrderBy(x => x).ToArray();
+        if (currentBackupFiles.Count() > 30)
+        {
+            for (var i = 0; i < currentBackupFiles.Count() - 30; i++)
+            {
+                File.Delete(currentBackupFiles[i]);
+            }
         }
     }
 }

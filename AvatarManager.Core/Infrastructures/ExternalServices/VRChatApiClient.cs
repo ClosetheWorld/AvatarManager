@@ -19,7 +19,7 @@ public class VRChatApiClient : IVRChatApiClient
         _configuration = new Configuration
         {
             BasePath = "https://api.vrchat.cloud/api/1",
-            UserAgent = "AvatarManager/1.0.8",
+            UserAgent = "AvatarManager/1.0.9",
             DefaultHeaders =
             {
                 ["Cookie"] = $"apiKey=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26; auth={authToken}"
@@ -28,7 +28,7 @@ public class VRChatApiClient : IVRChatApiClient
 
         _authenticationApi = new AuthenticationApi(_apiClient, _apiClient, _configuration);
         _httpClient.DefaultRequestHeaders.Add("Cookie", $"auth={authToken}");
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", "AvatarManager/1.0.8");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "AvatarManager/1.0.9");
     }
 
     public bool Auth()
@@ -41,7 +41,7 @@ public class VRChatApiClient : IVRChatApiClient
         }
         catch (Exception e)
         {
-            throw e;
+            throw;
         }
     }
 

@@ -9,4 +9,5 @@ public interface IFolderService
     Task AddFolderAsync(Folder f);
     Task DeleteFolderAsync(string id);
     Task UpdateFolderAsync(Folder f);
+    Task AddContainAvatarIdToExistsFolderAsync(string folderId, List<string> avatarIds);
 }

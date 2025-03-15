@@ -17,8 +17,8 @@
 
 	<PropertyGroup>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-		<FileVersion>1.0.8.0</FileVersion>
-		<Version>1.0.8</Version>
+		<FileVersion>1.0.9.0</FileVersion>
+		<Version>1.0.9</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
