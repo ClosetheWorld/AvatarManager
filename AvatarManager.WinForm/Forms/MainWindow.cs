@@ -162,7 +162,7 @@ public partial class MainWindow : Form
     private async void avatarGrid_CellClick(object sender, DataGridViewCellEventArgs e)
     {
         // avatarGridの画像がクリックされた場合フォーカスセルを名前のカラムに変更
-        if (e.ColumnIndex == 0)
+        if (e.RowIndex > -1 && e.ColumnIndex == 0)
         {
             avatarGrid.CurrentCell = avatarGrid.Rows[e.RowIndex].Cells[1];
         }
