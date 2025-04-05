@@ -144,7 +144,7 @@ public class VRChatApiClient : IVRChatApiClient
             try
             {
                 await Task.Delay(1000 * _exceptionCount * _exceptionCount);
-                avatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: offset * 100, releaseStatus: ReleaseStatus.All, offset: offset * 100);
+                avatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: offset * 100);
                 return avatars;
             }
             catch (Exception e)
