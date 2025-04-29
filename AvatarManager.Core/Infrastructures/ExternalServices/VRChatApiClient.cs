@@ -19,7 +19,7 @@ public class VRChatApiClient : IVRChatApiClient
         _configuration = new Configuration
         {
             BasePath = "https://api.vrchat.cloud/api/1",
-            UserAgent = "AvatarManager/1.0.12",
+            UserAgent = "AvatarManager/1.0.13",
             DefaultHeaders =
             {
                 ["Cookie"] = $"apiKey=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26; auth={authToken}"
@@ -28,7 +28,7 @@ public class VRChatApiClient : IVRChatApiClient
 
         _authenticationApi = new AuthenticationApi(_apiClient, _apiClient, _configuration);
         _httpClient.DefaultRequestHeaders.Add("Cookie", $"auth={authToken}");
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", "AvatarManager/1.0.12");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "AvatarManager/1.0.13");
     }
 
     public bool Auth()
@@ -61,7 +61,7 @@ public class VRChatApiClient : IVRChatApiClient
     {
         var response = await _authenticationApi.GetCurrentUserWithHttpInfoAsync();
         return response.Data;
-    }    
+    }
 
     public async Task<List<Avatar>> GetAvatarsAsync(string userId)
     {
@@ -69,7 +69,7 @@ public class VRChatApiClient : IVRChatApiClient
 
         // get 0-100 avatars
         try
-        {            
+        {
             avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
         }
         catch (Exception e)
@@ -87,7 +87,12 @@ public class VRChatApiClient : IVRChatApiClient
             {
                 try
                 {
-                    avatars.AddRange(await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
+                    var pagenatedAvatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100);
+                    if (pagenatedAvatars.Count % 100 == 0)
+                    {
+                        break;
+                    }
+                    avatars.AddRange(pagenatedAvatars);
                 }
                 catch (Exception e)
                 {
@@ -125,7 +130,7 @@ public class VRChatApiClient : IVRChatApiClient
         if (currentCount == 0)
         {
             try
-            {                
+            {
                 await Task.Delay(1000 * _exceptionCount * _exceptionCount);
                 avatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
                 return avatars;
