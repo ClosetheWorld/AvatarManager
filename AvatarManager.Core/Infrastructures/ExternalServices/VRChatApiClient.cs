@@ -61,7 +61,7 @@ public class VRChatApiClient : IVRChatApiClient
     {
         var response = await _authenticationApi.GetCurrentUserWithHttpInfoAsync();
         return response.Data;
-    }    
+    }
 
     public async Task<List<Avatar>> GetAvatarsAsync(string userId)
     {
@@ -69,7 +69,7 @@ public class VRChatApiClient : IVRChatApiClient
 
         // get 0-100 avatars
         try
-        {            
+        {
             avatars = _avatarsApi.SearchAvatars(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
         }
         catch (Exception e)
@@ -87,7 +87,12 @@ public class VRChatApiClient : IVRChatApiClient
             {
                 try
                 {
-                    avatars.AddRange(await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100));
+                    var pagenatedAvatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All, offset: i * 100);
+                    if (pagenatedAvatars.Count % 100 == 0)
+                    {
+                        break;
+                    }
+                    avatars.AddRange(pagenatedAvatars);
                 }
                 catch (Exception e)
                 {
@@ -125,7 +130,7 @@ public class VRChatApiClient : IVRChatApiClient
         if (currentCount == 0)
         {
             try
-            {                
+            {
                 await Task.Delay(1000 * _exceptionCount * _exceptionCount);
                 avatars = await _avatarsApi.SearchAvatarsAsync(user: "me", n: 100, releaseStatus: ReleaseStatus.All);
                 return avatars;
